@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="com.lambdaworks:lettuce:2.3.3" type="repository">
+    <properties maven-id="com.lambdaworks:lettuce:2.3.3" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/lettuce-2.3.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/netty-3.6.6.Final.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
