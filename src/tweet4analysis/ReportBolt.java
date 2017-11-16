@@ -25,7 +25,7 @@ public class ReportBolt extends BaseRichBolt {
     public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector)
     {
         // instantiate a redis connection
-        RedisClient client = new RedisClient("localhost",6379);
+        RedisClient client = new RedisClient("nimbus1",6379);
 
         // initiate the actual connection
         redis = client.connect();

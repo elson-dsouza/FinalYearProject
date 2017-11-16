@@ -31,7 +31,7 @@ public class MainTopology {
         builder.setSpout("tweet-spout", tweetSpout, 1);
 
         // attach the parse tweet bolt using shuffle grouping
-        builder.setBolt("parse-tweet-bolt", new ParseTweetBolt(), 10).shuffleGrouping("tweet-spout");
+        builder.setBolt("parse-tweet-bolt", new ParseTweetBolt(), 1).shuffleGrouping("tweet-spout");
 
         // attach the report bolt using global grouping - parallelism of 1
         builder.setBolt("report-bolt", new ReportBolt(), 1).globalGrouping("parse-tweet-bolt");
