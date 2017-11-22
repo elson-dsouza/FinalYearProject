@@ -86,7 +86,7 @@ public class TweetSpout extends BaseRichSpout {
     public void open(Map map, TopologyContext topologyContext, SpoutOutputCollector spoutOutputCollector)
     {
         // create the buffer to block tweets
-        queue = new LinkedBlockingQueue<String>(1000);
+        queue = new LinkedBlockingQueue<>(1000);
 
         // save the output collector for emitting tuples
         collector = spoutOutputCollector;

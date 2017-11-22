@@ -38,7 +38,7 @@ public class ReportBolt extends BaseRichBolt {
         String word = tuple.getStringByField("tweet-word");
 
         // publish the word count to redis using word as the key
-        redis.publish("WordCountTopology", word );
+        redis.publish("Stage1", word );
     }
 
     public void declareOutputFields(OutputFieldsDeclarer declarer)
