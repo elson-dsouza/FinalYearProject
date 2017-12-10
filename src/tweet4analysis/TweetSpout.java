@@ -108,8 +108,13 @@ public class TweetSpout extends BaseRichSpout {
         // provide the handler for twitter stream
         twitterStream.addListener(new TweetListener());
 
+        FilterQuery tweetFilterQuery = new FilterQuery();
+        tweetFilterQuery.track(new String[]{"air india"});
+        tweetFilterQuery.language(new String[]{"en"});
+        twitterStream.filter(tweetFilterQuery);
+
         // start the sampling of tweets
-        twitterStream.sample();
+        //twitterStream.sample();
     }
 
     @Override

@@ -1,5 +1,10 @@
 package tweet4analysis;
 
+import opennlp.tools.lemmatizer.Lemmatizer;
+import opennlp.tools.stemmer.PorterStemmer;
+import opennlp.tools.stemmer.Stemmer;
+import opennlp.tools.tokenize.SimpleTokenizer;
+import opennlp.tools.tokenize.TokenizerModel;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.IBasicBolt;
@@ -11,6 +16,8 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -34,16 +41,20 @@ public class ParseTweetBolt extends BaseRichBolt {
         // get the 1st column 'tweet' from tuple
         String tweet = tuple.getString(0);
 
-        // provide the delimiters for splitting the tweet
-        String delims = "[ .,?!]+";
+        //Tokenization
+        SimpleTokenizer tokenizer = SimpleTokenizer.INSTANCE;
+        String[] tokens = tokenizer.tokenize(tweet);
 
-        // now split the tweet into tokens
-        String[] tokens = tweet.split(delims);
+        // for each token/word, stem it
+//        PorterStemmer stemmer = new PorterStemmer();
+//        for (int i = 0; i < tokens.length; i++) {
+//            tokens[i] = stemmer.stem(tokens[i]);
+//        }
 
-        // for each token/word, emit it
-        for (String token: tokens) {
-            collector.emit(new Values(token));
-        }
+        ArrayList<String> tokenList = new ArrayList<>();
+        tokenList.addAll(Arrays.asList(tokens));
+
+        collector.emit(new Values(tokenList));
     }
 
     @Override
@@ -51,6 +62,6 @@ public class ParseTweetBolt extends BaseRichBolt {
     {
         // tell storm the schema of the output tuple for this spout
         // tuple consists of a single column called 'tweet-word'
-        declarer.declare(new Fields("tweet-word"));
+        declarer.declare(new Fields("tweet-words"));
     }
 }

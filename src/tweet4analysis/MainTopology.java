@@ -18,9 +18,8 @@ public class MainTopology {
 
         /*
         * In order to create the spout, you need to get twitter credentials
-        * If you need to use Twitter firehose/Tweet stream for your idea,
+        * If you need to use Twitter Firehose / Tweet stream for your idea,
         * create a set of credentials by following the instructions at
-        *
         * https://dev.twitter.com/discussions/631
         **/
 
@@ -31,7 +30,7 @@ public class MainTopology {
         builder.setSpout("tweet-spout", tweetSpout, 1);
 
         // attach the parse tweet bolt using shuffle grouping
-        builder.setBolt("parse-tweet-bolt", new ParseTweetBolt(), 1).shuffleGrouping("tweet-spout");
+        builder.setBolt("parse-tweet-bolt", new ParseTweetBolt(), 10).shuffleGrouping("tweet-spout");
 
         // attach the report bolt using global grouping - parallelism of 1
         builder.setBolt("report-bolt", new ReportBolt(), 1).globalGrouping("parse-tweet-bolt");
@@ -45,22 +44,19 @@ public class MainTopology {
         if (args != null && args.length > 0) {
 
             // run it in a live cluster
-
             // set the number of workers for running all spout and bolt tasks
+
             conf.setNumWorkers(3);
 
             // create the topology and submit with config
             try {
                 StormSubmitter.submitTopology(args[0], conf, builder.createTopology());
-            } catch (AlreadyAliveException e) {
-                e.printStackTrace();
-            } catch (InvalidTopologyException e) {
-                e.printStackTrace();
-            } catch (AuthorizationException e) {
+            } catch (AlreadyAliveException | InvalidTopologyException | AuthorizationException e) {
                 e.printStackTrace();
             }
 
-        } else {
+        }
+        else {
 
             // run it in a simulated local cluster
 

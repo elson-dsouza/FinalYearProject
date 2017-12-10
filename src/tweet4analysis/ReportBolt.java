@@ -11,6 +11,7 @@ import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Tuple;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -25,7 +26,7 @@ public class ReportBolt extends BaseRichBolt {
     public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector)
     {
         // instantiate a redis connection
-        RedisClient client = new RedisClient("nimbus1",6379);
+        RedisClient client = new RedisClient("localhost",6379);
 
         // initiate the actual connection
         redis = client.connect();
@@ -35,10 +36,10 @@ public class ReportBolt extends BaseRichBolt {
     public void execute(Tuple tuple)
     {
         // access the word
-        String word = tuple.getStringByField("tweet-word");
+        ArrayList<String> words = (ArrayList<String>) tuple.getValueByField("tweet-words");
 
         // publish the word count to redis using word as the key
-        redis.publish("Stage1", word );
+        redis.publish("Stage1", words.toString() );
     }
 
     public void declareOutputFields(OutputFieldsDeclarer declarer)
