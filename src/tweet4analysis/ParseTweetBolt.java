@@ -45,7 +45,7 @@ public class ParseTweetBolt extends BaseRichBolt {
         SimpleTokenizer tokenizer = SimpleTokenizer.INSTANCE;
         String[] tokens = tokenizer.tokenize(tweet);
 
-        // for each token/word, stem it
+        //for each token/word, stem it
 //        PorterStemmer stemmer = new PorterStemmer();
 //        for (int i = 0; i < tokens.length; i++) {
 //            tokens[i] = stemmer.stem(tokens[i]);
@@ -53,7 +53,7 @@ public class ParseTweetBolt extends BaseRichBolt {
 
         ArrayList<String> tokenList = new ArrayList<>();
         tokenList.addAll(Arrays.asList(tokens));
-
+        tokenList.add(tweet);
         collector.emit(new Values(tokenList));
     }
 

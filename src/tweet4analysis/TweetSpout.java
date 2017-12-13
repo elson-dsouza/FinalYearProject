@@ -33,44 +33,6 @@ public class TweetSpout extends BaseRichSpout {
     // Shared queue for getting buffering tweets received
     private LinkedBlockingQueue<String> queue = null;
 
-    // Class for listening on the tweet stream - for twitter4j
-    private class TweetListener implements StatusListener {
-
-        // Implement the callback function when a tweet arrives
-        @Override
-        public void onStatus(Status status)
-        {
-            // add the tweet into the queue buffer
-            queue.offer(status.getText());
-        }
-
-        @Override
-        public void onDeletionNotice(StatusDeletionNotice sdn)
-        {
-        }
-
-        @Override
-        public void onTrackLimitationNotice(int i)
-        {
-        }
-
-        @Override
-        public void onScrubGeo(long l, long l1)
-        {
-        }
-
-        @Override
-        public void onStallWarning(StallWarning warning)
-        {
-        }
-
-        @Override
-        public void onException(Exception e)
-        {
-            e.printStackTrace();
-        }
-    };
-
     /**
      * Constructor for tweet spout that accepts the credentials
      */
@@ -106,10 +68,44 @@ public class TweetSpout extends BaseRichSpout {
         twitterStream = fact.getInstance();
 
         // provide the handler for twitter stream
-        twitterStream.addListener(new TweetListener());
+        twitterStream.addListener(new StatusListener(){
+            // Implement the callback function when a tweet arrives
+            @Override
+            public void onStatus(Status status)
+            {
+                // add the tweet into the queue buffer
+                queue.offer(status.getText());
+            }
+
+            @Override
+            public void onDeletionNotice(StatusDeletionNotice sdn)
+            {
+            }
+
+            @Override
+            public void onTrackLimitationNotice(int i)
+            {
+            }
+
+            @Override
+            public void onScrubGeo(long l, long l1)
+            {
+            }
+
+            @Override
+            public void onStallWarning(StallWarning warning)
+            {
+            }
+
+            @Override
+            public void onException(Exception e)
+            {
+                e.printStackTrace();
+            }
+        });
 
         FilterQuery tweetFilterQuery = new FilterQuery();
-        tweetFilterQuery.track(new String[]{"air india"});
+        tweetFilterQuery.track(new String[]{"Narendra Modi"});
         tweetFilterQuery.language(new String[]{"en"});
         twitterStream.filter(tweetFilterQuery);
 

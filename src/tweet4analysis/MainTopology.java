@@ -54,7 +54,6 @@ public class MainTopology {
             } catch (AlreadyAliveException | InvalidTopologyException | AuthorizationException e) {
                 e.printStackTrace();
             }
-
         }
         else {
 
