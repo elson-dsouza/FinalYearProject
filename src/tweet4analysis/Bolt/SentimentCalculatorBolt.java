@@ -79,6 +79,7 @@ public final class SentimentCalculatorBolt extends BaseRichBolt {
                 .omitEmptyStrings()
                 .split(processedTweet);
         int sentimentOfCurrentTweet = 0;
+
         //Loop through all the words and find the sentiment of this tweet.
         for (final String word : words) {
             if(mAfinnSentimentMap.containsKey(word)){
