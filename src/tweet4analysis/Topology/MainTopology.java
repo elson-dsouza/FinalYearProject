@@ -53,7 +53,6 @@ public class MainTopology {
             } catch (AlreadyAliveException | InvalidTopologyException | AuthorizationException e) {
                 e.printStackTrace();
             }
-
         }
         else {
             // run it in a simulated local cluster
