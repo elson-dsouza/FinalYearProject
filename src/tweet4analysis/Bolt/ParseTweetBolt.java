@@ -1,4 +1,4 @@
-package tweet4analysis;
+package tweet4analysis.Bolt;
 
 import opennlp.tools.lemmatizer.Lemmatizer;
 import opennlp.tools.stemmer.PorterStemmer;

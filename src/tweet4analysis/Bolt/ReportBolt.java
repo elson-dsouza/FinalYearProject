@@ -1,4 +1,4 @@
-package tweet4analysis;
+package tweet4analysis.Bolt;
 
 import com.lambdaworks.redis.RedisClient;
 import com.lambdaworks.redis.RedisConnection;

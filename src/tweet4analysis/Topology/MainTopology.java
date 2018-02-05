@@ -1,4 +1,4 @@
-package tweet4analysis;
+package tweet4analysis.Topology;
 
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
@@ -8,6 +8,11 @@ import org.apache.storm.generated.AuthorizationException;
 import org.apache.storm.generated.InvalidTopologyException;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.utils.Utils;
+import tweet4analysis.Bolt.ParseTweetBolt;
+import tweet4analysis.Bolt.ReportBolt;
+import tweet4analysis.Bolt.SentimentCalculatorBolt;
+import tweet4analysis.Spout.TweetSpout;
+import tweet4analysis.Utils.Constants;
 
 public class MainTopology {
 
@@ -16,24 +21,18 @@ public class MainTopology {
         // create the topology
         TopologyBuilder builder = new TopologyBuilder();
 
-        /*
-        * In order to create the spout, you need to get twitter credentials
-        * If you need to use Twitter Firehose / Tweet stream for your idea,
-        * create a set of credentials by following the instructions at
-        * https://dev.twitter.com/discussions/631
-        **/
-
         // now create the tweet spout with the credentials
-        TweetSpout tweetSpout = new TweetSpout("SHo4lHNWxFvRFMs4XRoFFHXqi", "R3ZX67z2nnPkiPv7TQ45Ajxx6foN2LmnuMhfCfBR8v0IY3fclY", "707193271085195264-fq4yVwn1zvJPxKBlxjOUAaiVkXFp5ew", "VsZnHrtCQVWr3UZHxB6eWrn4u4H1Ptl7NM0BEIc1M0G5J");
 
         // attach the tweet spout to the topology - parallelism of 1
-        builder.setSpout("tweet-spout", tweetSpout, 1);
+        builder.setSpout("tweet-spout", new TweetSpout(), 1);
+        builder.setBolt("tweet-sentiment", new SentimentCalculatorBolt(), 10)
+                .shuffleGrouping("tweet-spout");
 
-        // attach the parse tweet bolt using shuffle grouping
-        builder.setBolt("parse-tweet-bolt", new ParseTweetBolt(), 10).shuffleGrouping("tweet-spout");
-
-        // attach the report bolt using global grouping - parallelism of 1
-        builder.setBolt("report-bolt", new ReportBolt(), 1).globalGrouping("parse-tweet-bolt");
+//        // attach the parse tweet bolt using shuffle grouping
+//        builder.setBolt("parse-tweet-bolt", new ParseTweetBolt(), 10).shuffleGrouping("tweet-spout");
+//
+//        // attach the report bolt using global grouping - parallelism of 1
+//        builder.setBolt("report-bolt", new ReportBolt(), 1).globalGrouping("parse-tweet-bolt");
 
         // create the default config object
         Config conf = new Config();
@@ -57,7 +56,6 @@ public class MainTopology {
 
         }
         else {
-
             // run it in a simulated local cluster
 
             // set the number of threads to run - similar to setting number of workers in live cluster
@@ -67,13 +65,13 @@ public class MainTopology {
             LocalCluster cluster = new LocalCluster();
 
             // submit the topology to the local cluster
-            cluster.submitTopology("tweet-word-count", conf, builder.createTopology());
+            cluster.submitTopology(Constants.TOPOLOGY_NAME, conf, builder.createTopology());
 
             // let the topology run for 300 seconds. note topologies never terminate!
             Utils.sleep(300000);
 
             // now kill the topology
-            cluster.killTopology("tweet-word-count");
+            cluster.killTopology(Constants.TOPOLOGY_NAME);
 
             // we are done, so shutdown the local cluster
             cluster.shutdown();
