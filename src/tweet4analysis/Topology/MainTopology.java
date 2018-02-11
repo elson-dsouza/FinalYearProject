@@ -8,8 +8,6 @@ import org.apache.storm.generated.AuthorizationException;
 import org.apache.storm.generated.InvalidTopologyException;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.utils.Utils;
-import tweet4analysis.Bolt.ParseTweetBolt;
-import tweet4analysis.Bolt.ReportBolt;
 import tweet4analysis.Bolt.SentimentCalculatorBolt;
 import tweet4analysis.Spout.TweetSpout;
 import tweet4analysis.Utils.Constants;
@@ -27,12 +25,6 @@ public class MainTopology {
         builder.setSpout("tweet-spout", new TweetSpout(), 1);
         builder.setBolt("tweet-sentiment", new SentimentCalculatorBolt(), 10)
                 .shuffleGrouping("tweet-spout");
-
-//        // attach the parse tweet bolt using shuffle grouping
-//        builder.setBolt("parse-tweet-bolt", new ParseTweetBolt(), 10).shuffleGrouping("tweet-spout");
-//
-//        // attach the report bolt using global grouping - parallelism of 1
-//        builder.setBolt("report-bolt", new ReportBolt(), 1).globalGrouping("parse-tweet-bolt");
 
         // create the default config object
         Config conf = new Config();

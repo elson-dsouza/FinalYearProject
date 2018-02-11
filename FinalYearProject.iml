@@ -13,5 +13,6 @@
     <orderEntry type="library" name="com.google.guava:guava:15.0" level="project" />
     <orderEntry type="library" name="com.lambdaworks:lettuce:2.3.3" level="project" />
     <orderEntry type="library" name="org.apache.opennlp:opennlp-tools:1.8.3" level="project" />
+    <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
   </component>
 </module>
