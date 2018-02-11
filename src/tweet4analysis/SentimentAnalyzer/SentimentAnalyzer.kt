@@ -12,7 +12,7 @@ import java.util.*
 //TODO: Move this to the [SentimentCalculatorBolt] if possible
 class SentimentAnalyzer {
 
-    private var inputString: String? = null
+    var inputString: String? = null
     private var inputStringProperties: TextProperties? = null
 
     var polarity: Map<String, Float>? = null
@@ -35,7 +35,7 @@ class SentimentAnalyzer {
     private val tokenWiseSentiment: List<Float>
         get() {
             var sentiments: MutableList<Float> = ArrayList()
-            val wordsAndEmoticons = inputStringProperties!!.wordsAndEmoticons
+            val wordsAndEmoticons = inputStringProperties?.wordsAndEmoticons
 
             for (currentItem in wordsAndEmoticons!!) {
                 var currentValence = 0.0f
