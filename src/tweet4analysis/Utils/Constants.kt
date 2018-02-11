@@ -78,5 +78,6 @@ object Constants {
     @JvmField
     val URL_PREFIX = "http://"
 
+    @JvmField
     val VADER_FILE: String = "VADER/lexicon.txt"
 }

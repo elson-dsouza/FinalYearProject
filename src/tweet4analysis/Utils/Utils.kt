@@ -53,8 +53,7 @@ object Utils {
     private val SentimentLadenIdioms = HashMap<String, Float>()
 
     //Tokens with their respective valencies.
-    @JvmField
-    val wordValenceDictionary = readLexiconFile()
+    val wordValenceDictionary: Map<String, Float> = readLexiconFile()
 
     val sentimentLadenIdioms: Map<String, Float>
         get() = SentimentLadenIdioms
