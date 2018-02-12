@@ -5,14 +5,14 @@ package tweet4analysis.Utils
  */
 object ScoreType {
     //Label for positive sentiment.
-    val POSITIVE = "positive"
+    const val POSITIVE = "positive"
 
     //Label for negative sentiment.
-    val NEGATIVE = "negative"
+    const val NEGATIVE = "negative"
 
     //Label for neutral sentiment.
-    val NEUTRAL = "neutral"
+    const val NEUTRAL = "neutral"
 
     //Label for compound sentiment.
-    val COMPOUND = "compound"
+    const val COMPOUND = "compound"
 }

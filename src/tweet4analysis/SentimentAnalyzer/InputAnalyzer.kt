@@ -32,14 +32,10 @@ class InputAnalyzer {
     @Throws(IOException::class)
     private fun tokenize(inputString: String, removePunctuation: Boolean): List<String> {
         val reader = StringReader(inputString)
-        val currentTokenizer: Tokenizer
-        if (removePunctuation) {
-            currentTokenizer = StandardTokenizer()
-        } else {
-            currentTokenizer = WhitespaceTokenizer()
-        }
-        currentTokenizer.setReader(reader)
+        val currentTokenizer: Tokenizer = if (removePunctuation) StandardTokenizer()
+        else WhitespaceTokenizer()
 
+        currentTokenizer.setReader(reader)
         val tokenStream = LengthFilter(currentTokenizer, 2, Integer.MAX_VALUE)
         val charTermAttribute = tokenStream.addAttribute(CharTermAttribute::class.java)
         tokenStream.reset()

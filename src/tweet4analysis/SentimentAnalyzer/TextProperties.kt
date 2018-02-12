@@ -30,8 +30,7 @@ constructor(private val inputText: String) {
      * List of tokens extracted from the [TextProperties.inputText].
      * Emoticons are removed here.
      */
-    var wordsOnly: List<String>? = null
-        private set
+    private var wordsOnly: List<String>? = null
 
     //Flags that specifies if the current string has yelling words.
     var isCapDiff: Boolean = false
@@ -48,12 +47,7 @@ constructor(private val inputText: String) {
      */
     private val isAllCapDifferential: Boolean
         get() {
-            var countAllCaps = 0
-            for (token in wordsAndEmoticons!!) {
-                if (Utils.isUpper(token)) {
-                    countAllCaps++
-                }
-            }
+            val countAllCaps = wordsAndEmoticons!!.count { Utils.isUpper(it) }
             val capDifferential = wordsAndEmoticons!!.size - countAllCaps
             return 0 < capDifferential && capDifferential < wordsAndEmoticons!!.size
         }

@@ -5,7 +5,6 @@ package tweet4analysis.Utils
  */
 
 enum class Valence(val value: Float) {
-
     //This denotes the default valence for token that boost.
     DEFAULT_BOOSTING(0.293f),
 

@@ -17,7 +17,6 @@ import java.util.*
  * (https://github.com/cjhutto/vaderSentiment/blob/master/vaderSentiment/vaderSentiment.py)
  */
 object Utils {
-
     //Class loader to get the path to the resources folder.
     private val CLASS_LOADER = Utils::class.java.classLoader
 
@@ -43,23 +42,15 @@ object Utils {
     @JvmField
     val NEGATIVE_WORDS: Set<String> = HashSet(Arrays.asList(*NEGATIVE_WORDS_ARRAY))
 
-    /**
-     * This dictionary holds a token and its corresponding boosting/dampening
-     * factor for sentiment scoring.
-     */
-    private val BoosterDictionary = HashMap<String, Float>()
+    //This dictionary holds a token and its corresponding boosting/dampening
+    //factor for sentiment scoring.
+    val BoosterDictionary = HashMap<String, Float>()
 
     //Idioms with their respective valencies.
-    private val SentimentLadenIdioms = HashMap<String, Float>()
+    val SentimentLadenIdioms = HashMap<String, Float>()
 
     //Tokens with their respective valencies.
-    val wordValenceDictionary: Map<String, Float> = readLexiconFile()
-
-    val sentimentLadenIdioms: Map<String, Float>
-        get() = SentimentLadenIdioms
-
-    val boosterDictionary: Map<String, Float>
-        get() = BoosterDictionary
+    val WordValenceDictionary: Map<String, Float> = readLexiconFile()
 
     init {
         BoosterDictionary["decidedly"] = Valence.DEFAULT_BOOSTING.value
@@ -155,12 +146,7 @@ object Utils {
         if (!token.matches(Constants.NON_NUMERIC_STRING_REGEX.toRegex())) {
             return false
         }
-        for (i in 0 until token.length) {
-            if (Character.isLowerCase(token[i])) {
-                return false
-            }
-        }
-        return true
+        return (0 until token.length).none { Character.isLowerCase(token[it]) }
     }
 
     /**

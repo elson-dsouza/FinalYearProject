@@ -1,15 +1,8 @@
 package tweet4analysis.Bolt;
 
-import opennlp.tools.lemmatizer.Lemmatizer;
-import opennlp.tools.stemmer.PorterStemmer;
-import opennlp.tools.stemmer.Stemmer;
 import opennlp.tools.tokenize.SimpleTokenizer;
-import opennlp.tools.tokenize.TokenizerModel;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
-import org.apache.storm.topology.IBasicBolt;
-import org.apache.storm.topology.IRichBolt;
-import org.apache.storm.topology.IWindowedBolt;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Fields;
@@ -23,6 +16,7 @@ import java.util.Map;
 /**
  * Created by elson on 14/11/17.
  */
+@Deprecated
 public class ParseTweetBolt extends BaseRichBolt {
 
     // To output tuples from this bolt to the count bolt

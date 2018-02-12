@@ -19,8 +19,7 @@ public class MainTopology {
         // create the topology
         TopologyBuilder builder = new TopologyBuilder();
 
-        // now create the tweet spout with the credentials
-
+        // now create the tweet spout with the credentials and
         // attach the tweet spout to the topology - parallelism of 1
         builder.setSpout("tweet-spout", new TweetSpout(), 1);
         builder.setBolt("tweet-sentiment", new SentimentCalculatorBolt(), 10)

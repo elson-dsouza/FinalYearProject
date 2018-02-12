@@ -1,22 +1,20 @@
 package tweet4analysis.SentimentAnalyzer
 
 import org.apache.storm.shade.org.apache.commons.lang.StringUtils
-import tweet4analysis.Utils.*
-import java.io.IOException
+import tweet4analysis.Utils.Constants
+import tweet4analysis.Utils.SentimentModifyingTokens
+import tweet4analysis.Utils.Utils
+import tweet4analysis.Utils.Valence
 import java.util.*
 
 
 /**
  * Created by elson on 11/2/18.
  */
-//TODO: Move this to the [SentimentCalculatorBolt] if possible
 class SentimentAnalyzer {
 
-    var inputString: String? = null
+    private var inputString: String? = null
     private var inputStringProperties: TextProperties? = null
-
-    var polarity: Map<String, Float>? = null
-        private set
 
     /**
      * This section performs the following evaluation:
@@ -46,13 +44,13 @@ class SentimentAnalyzer {
                                 && currentItemLower == SentimentModifyingTokens.KIND.value
                                 && wordsAndEmoticons[currentItemPosition + 1].toLowerCase()
                                 == SentimentModifyingTokens.OF.value)
-                        || Utils.boosterDictionary.containsKey(currentItemLower)) {
+                        || Utils.BoosterDictionary.containsKey(currentItemLower)) {
                     sentiments.add(currentValence)
                     continue
                 }
 
-                if (Utils.wordValenceDictionary.containsKey(currentItemLower)) {
-                    currentValence = Utils.wordValenceDictionary.get(currentItemLower)!!
+                if (Utils.WordValenceDictionary.containsKey(currentItemLower)) {
+                    currentValence = Utils.WordValenceDictionary[currentItemLower]!!
 
                     if (Utils.isUpper(currentItem) && inputStringProperties!!.isCapDiff) {
                         if (currentValence > 0.0) {
@@ -70,7 +68,7 @@ class SentimentAnalyzer {
                                     Math.abs(closeTokenIndex)
                         }
 
-                        if (currentItemPosition > distance && !Utils.wordValenceDictionary
+                        if (currentItemPosition > distance && !Utils.WordValenceDictionary
                                         .containsKey(wordsAndEmoticons[closeTokenIndex]
                                                 .toLowerCase())) {
 
@@ -104,28 +102,13 @@ class SentimentAnalyzer {
         }
 
     /**
-     * This is a composite function that computes token-wise sentiment scores and then converts that to
-     * higher level scores.
-     *
-     * @return the positive, negative, neutral and compound polarity scores as a map
-     */
-    private val sentiment: Map<String, Float>
-        get() {
-            val tokenWiseSentiments = tokenWiseSentiment
-            return getPolarityScores(tokenWiseSentiments)
-        }
-
-    @Throws(IOException::class)
-    fun setInputStringProperties() {
-        inputStringProperties = TextProperties(inputString!!)
-    }
-
-    /**
      * This is the main function.
      * This triggers all the sentiment scoring on the [SentimentAnalyzer.inputString].
      */
-    fun analyze() {
-        polarity = sentiment
+    fun analyze(inputString: String): Float {
+        inputStringProperties = TextProperties(inputString)
+        val tokenWiseSentiments = tokenWiseSentiment
+        return getPolarityScores(tokenWiseSentiments)
     }
 
     /**
@@ -137,8 +120,8 @@ class SentimentAnalyzer {
     private fun valenceModifier(precedingToken: String, currentValence: Float): Float {
         var scalar = 0.0f
         val precedingWordLower = precedingToken.toLowerCase()
-        if (Utils.boosterDictionary.containsKey(precedingWordLower)) {
-            scalar = Utils.boosterDictionary.get(precedingWordLower)!!
+        if (Utils.BoosterDictionary.containsKey(precedingWordLower)) {
+            scalar = Utils.BoosterDictionary[precedingWordLower]!!
             if (currentValence < 0.0f) {
                 scalar = -scalar
             }
@@ -264,8 +247,8 @@ class SentimentAnalyzer {
         var tempValence = currentValence
 
         for (leftGramSequence in leftGramSequences) {
-            if (Utils.sentimentLadenIdioms.containsKey(leftGramSequence)) {
-                tempValence = Utils.sentimentLadenIdioms.get(leftGramSequence)!!
+            if (Utils.SentimentLadenIdioms.containsKey(leftGramSequence)) {
+                tempValence = Utils.SentimentLadenIdioms[leftGramSequence]!!
                 break
             }
         }
@@ -277,8 +260,8 @@ class SentimentAnalyzer {
                     wordsAndEmoticons[currentItemPosition + 1]
             )
 
-            if (Utils.sentimentLadenIdioms.containsKey(rightBiGramFromCurrent)) {
-                tempValence = Utils.sentimentLadenIdioms.get(rightBiGramFromCurrent)!!
+            if (Utils.SentimentLadenIdioms.containsKey(rightBiGramFromCurrent)) {
+                tempValence = Utils.SentimentLadenIdioms[rightBiGramFromCurrent]!!
             }
         }
 
@@ -289,13 +272,13 @@ class SentimentAnalyzer {
                     wordsAndEmoticons[currentItemPosition + 1],
                     wordsAndEmoticons[currentItemPosition + 2]
             )
-            if (Utils.sentimentLadenIdioms.containsKey(rightTriGramFromCurrent)) {
-                tempValence = Utils.sentimentLadenIdioms.get(rightTriGramFromCurrent)!!
+            if (Utils.SentimentLadenIdioms.containsKey(rightTriGramFromCurrent)) {
+                tempValence = Utils.SentimentLadenIdioms[rightTriGramFromCurrent]!!
             }
         }
 
-        if (Utils.boosterDictionary.containsKey(leftBiGramFromTwoPrevious)
-                || Utils.boosterDictionary.containsKey(leftBiGramFromOnePrevious)) {
+        if (Utils.BoosterDictionary.containsKey(leftBiGramFromTwoPrevious)
+                || Utils.BoosterDictionary.containsKey(leftBiGramFromOnePrevious)) {
             tempValence += Valence.DEFAULT_DAMPING.value
         }
 
@@ -313,12 +296,10 @@ class SentimentAnalyzer {
         var negativeSentimentScore = 0.0f
         var neutralSentimentCount = 0
         for (valence in tokenWiseSentimentState) {
-            if (valence > 0.0f) {
-                positiveSentimentScore += valence + 1.0f
-            } else if (valence < 0.0f) {
-                negativeSentimentScore += valence - 1.0f
-            } else {
-                neutralSentimentCount += 1
+            when {
+                valence > 0.0f -> positiveSentimentScore += valence + 1.0f
+                valence < 0.0f -> negativeSentimentScore += valence - 1.0f
+                else -> neutralSentimentCount += 1
             }
         }
         return ArrayList(
@@ -335,15 +316,12 @@ class SentimentAnalyzer {
      * @param tokenWiseSentimentState the tokenwise scores of the input string
      * @return the positive, negative, neutral and compound polarity scores as a map
      */
-    private fun getPolarityScores(tokenWiseSentimentState: List<Float>): Map<String, Float> {
-        val result = HashMap<String, Float>()
+    private fun getPolarityScores(tokenWiseSentimentState: List<Float>): Float {
+        var result = 0.0f
         if (!tokenWiseSentimentState.isEmpty()) {
 
             //Compute the total valence.
-            var totalValence = 0.0f
-            for (valence in tokenWiseSentimentState) {
-                totalValence += valence
-            }
+            var totalValence = tokenWiseSentimentState.sum()
 
             //Adjust the total valence score on the basis of the punctuations in the input string.
             val punctuationAmplifier = boostByPunctuation()
@@ -368,26 +346,8 @@ class SentimentAnalyzer {
             val normalizationFactor = (positiveSentimentScore + Math.abs(negativeSentimentScore)
                     + neutralSentimentCount.toFloat())
 
-            val compoundPolarity = normalizeScore(totalValence)
-
-            val absolutePositivePolarity = Math.abs(positiveSentimentScore / normalizationFactor)
-            val absoluteNegativePolarity = Math.abs(negativeSentimentScore / normalizationFactor)
-            val absoluteNeutralPolarity = Math.abs(neutralSentimentCount / normalizationFactor)
-
-            val normalizedPositivePolarity = roundDecimal(absolutePositivePolarity, 3)
-            val normalizedNegativePolarity = roundDecimal(absoluteNegativePolarity, 3)
-            val normalizedNeutralPolarity = roundDecimal(absoluteNeutralPolarity, 3)
-            val normalizedCompoundPolarity = roundDecimal(compoundPolarity, 4)
-
-            result[ScoreType.COMPOUND] = normalizedCompoundPolarity
-            result[ScoreType.POSITIVE] = normalizedPositivePolarity
-            result[ScoreType.NEGATIVE] = normalizedNegativePolarity
-            result[ScoreType.NEUTRAL] = normalizedNeutralPolarity
-        } else {
-            result[ScoreType.COMPOUND] = 0.0f
-            result[ScoreType.POSITIVE] = 0.0f
-            result[ScoreType.NEGATIVE] = 0.0f
-            result[ScoreType.NEUTRAL] = 0.0f
+            result += positiveSentimentScore / normalizationFactor
+            result += negativeSentimentScore / normalizationFactor
         }
         return result
     }
@@ -427,12 +387,10 @@ class SentimentAnalyzer {
 
         var questionMarkAmplifier = 0.0f
         if (questionMarkCount > 1) {
-            if (questionMarkCount <= Constants.MAX_QUESTION_MARKS) {
-                questionMarkAmplifier = questionMarkCount *
-                        Valence.QUESTION_MARK_MAX_COUNT_BOOSTING.value
-            } else {
-                questionMarkAmplifier = Valence.QUESTION_MARK_BOOSTING.value
-            }
+            questionMarkAmplifier =
+                    if (questionMarkCount <= Constants.MAX_QUESTION_MARKS)
+                        questionMarkCount * Valence.QUESTION_MARK_MAX_COUNT_BOOSTING.value
+                    else Valence.QUESTION_MARK_BOOSTING.value
         }
         return questionMarkAmplifier
     }
@@ -476,7 +434,7 @@ class SentimentAnalyzer {
                                    currentValence: Float): Float {
         var valence = currentValence
         if (currentItemPosition > 1
-                && !Utils.wordValenceDictionary.containsKey(wordsAndEmoticons[currentItemPosition - 1]
+                && !Utils.WordValenceDictionary.containsKey(wordsAndEmoticons[currentItemPosition - 1]
                         .toLowerCase())
                 && wordsAndEmoticons[currentItemPosition - 1].toLowerCase() ==
                 SentimentModifyingTokens.LEAST.value) {
@@ -487,7 +445,7 @@ class SentimentAnalyzer {
                             SentimentModifyingTokens.VERY.value)) {
                 valence *= Valence.NEGATIVE_WORD_DAMPING_FACTOR.value
             }
-        } else if (currentItemPosition > 0 && !Utils.wordValenceDictionary
+        } else if (currentItemPosition > 0 && !Utils.WordValenceDictionary
                         .containsKey(wordsAndEmoticons[currentItemPosition - 1].toLowerCase())
                 && wordsAndEmoticons[currentItemPosition - 1] == SentimentModifyingTokens.LEAST.value) {
             valence *= Valence.NEGATIVE_WORD_DAMPING_FACTOR.value
@@ -527,33 +485,5 @@ class SentimentAnalyzer {
         return if (!checkContractions) {
             result
         } else result || hasContraction(token)
-    }
-
-    /**
-     * Normalize the total valence of the input string, where alpha is the estimated maximum value
-     * of valence.
-     * @param score score
-     * @param alpha estimated max value
-     * @return normalized value of score
-     */
-    private fun normalizeScore(score: Float, alpha: Float = Constants.DEFAULT_ALPHA): Float {
-        val normalizedScore = score / Math.sqrt((score * score + alpha).toDouble())
-        return normalizedScore.toFloat()
-    }
-
-    //Companion object as a replacement for static in Kotlin
-    companion object {
-
-        /**
-         * This method rounds of a float value to defined no. of places.
-         * @param currentValue current float values
-         * @param noOfPlaces   no. of decimal places
-         * @return rounded float value
-         */
-        private fun roundDecimal(currentValue: Float, noOfPlaces: Int): Float {
-            val factor = Math.pow(10.0, noOfPlaces.toDouble()).toFloat()
-            val number = Math.round(currentValue * factor).toFloat()
-            return number / factor
-        }
     }
 }

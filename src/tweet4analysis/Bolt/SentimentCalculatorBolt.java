@@ -4,31 +4,35 @@ import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseRichBolt;
+import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.storm.tuple.Values;
+import tweet4analysis.Model.Tweet;
 import tweet4analysis.SentimentAnalyzer.SentimentAnalyzer;
 import twitter4j.Status;
 import twitter4j.URLEntity;
 
-import java.io.IOException;
 import java.util.Map;
 
 /**
  * Created by elson on 5/2/18.
  */
 public final class SentimentCalculatorBolt extends BaseRichBolt {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(SentimentCalculatorBolt.class);
+    // To output tuples from this bolt to the count bolt
+    private OutputCollector collector;
 
     @Override
     public final void prepare(final Map map, final TopologyContext topologyContext,
                               final OutputCollector collector) {
+        // save the output collector for emitting tuples
+        this.collector = collector;
     }
 
     @Override
     public final void declareOutputFields(final OutputFieldsDeclarer outputFieldsDeclarer) {
-        //No output at the moment
+        // tell storm the schema of the output tuple for this spout
+        // tuple consists of a single column called 'tweet-word'
+        outputFieldsDeclarer.declare(new Fields("tweet-with-sentiment"));
     }
 
     @Override
@@ -36,18 +40,12 @@ public final class SentimentCalculatorBolt extends BaseRichBolt {
         final Status status = (Status) input.getValueByField("tweet");
         final String tweetProcessed = preProcessTweet(status);
         SentimentAnalyzer sentimentAnalyzer = new SentimentAnalyzer();
-        sentimentAnalyzer.setInputString(tweetProcessed);
-        try {
-            sentimentAnalyzer.setInputStringProperties();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        sentimentAnalyzer.analyze();
-        String sentimentOfCurrentTweet = sentimentAnalyzer.getPolarity().toString();
-        System.out.println("Tweet : Sentiment " + sentimentOfCurrentTweet + tweetProcessed);
-        LOGGER.debug("Tweet : Sentiment {} ==> {}", tweetProcessed, sentimentOfCurrentTweet);
 
-        //TODO: Decide what is to be done with the sentiment
+        float sentimentOfCurrentTweet = sentimentAnalyzer.analyze(tweetProcessed);
+        System.out.println("Tweet : Sentiment " + sentimentOfCurrentTweet + tweetProcessed);
+        Tweet tweetWithSentiment = new Tweet(status, tweetProcessed, sentimentOfCurrentTweet);
+
+        collector.emit(new Values(tweetWithSentiment));
     }
 
     /**
