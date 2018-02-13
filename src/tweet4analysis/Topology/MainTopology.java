@@ -21,9 +21,10 @@ public class MainTopology {
 
         // now create the tweet spout with the credentials and
         // attach the tweet spout to the topology - parallelism of 1
-        builder.setSpout("tweet-spout", new TweetSpout(), 1);
-        builder.setBolt("tweet-sentiment", new SentimentCalculatorBolt(), 10)
-                .shuffleGrouping("tweet-spout");
+        builder.setSpout(Constants.BOLT_NAMES.TWEET_SPOUT, new TweetSpout(), 1);
+        builder.setBolt(Constants.BOLT_NAMES.TWEET_SENTIMENT_BOLT, new SentimentCalculatorBolt(),
+                10)
+                .shuffleGrouping(Constants.BOLT_NAMES.TWEET_SPOUT);
 
         // create the default config object
         Config conf = new Config();

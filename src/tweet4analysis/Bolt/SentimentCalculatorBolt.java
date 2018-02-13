@@ -9,6 +9,7 @@ import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 import tweet4analysis.Model.Tweet;
 import tweet4analysis.SentimentAnalyzer.SentimentAnalyzer;
+import tweet4analysis.Utils.Constants;
 import twitter4j.Status;
 import twitter4j.URLEntity;
 
@@ -32,19 +33,18 @@ public final class SentimentCalculatorBolt extends BaseRichBolt {
     public final void declareOutputFields(final OutputFieldsDeclarer outputFieldsDeclarer) {
         // tell storm the schema of the output tuple for this spout
         // tuple consists of a single column called 'tweet-word'
-        outputFieldsDeclarer.declare(new Fields("tweet-with-sentiment"));
+        outputFieldsDeclarer.declare(new Fields(Constants.EMITTED_TUPLES.TWEET_WITH_SENTIMENT));
     }
 
     @Override
     public final void execute(final Tuple input) {
-        final Status status = (Status) input.getValueByField("tweet");
+        final Status status = (Status) input.getValueByField(Constants.EMITTED_TUPLES.RAW_TWEET);
         final String tweetProcessed = preProcessTweet(status);
         SentimentAnalyzer sentimentAnalyzer = new SentimentAnalyzer();
 
         float sentimentOfCurrentTweet = sentimentAnalyzer.analyze(tweetProcessed);
         System.out.println("Tweet : Sentiment " + sentimentOfCurrentTweet + tweetProcessed);
         Tweet tweetWithSentiment = new Tweet(status, tweetProcessed, sentimentOfCurrentTweet);
-
         collector.emit(new Values(tweetWithSentiment));
     }
 

@@ -62,5 +62,36 @@ object Constants {
     //This string defines the prefix for a string that has a URL.
     const val URL_PREFIX = "http://"
 
+    //This string defines the path to the VADER lexicon file need for Sentiment Analysis
     const val VADER_FILE: String = "VADER/lexicon.txt"
+
+    //This object holds the list of Emitted Tuple names
+    object EMITTED_TUPLES {
+        const val RAW_TWEET = "raw-tweet"
+        const val TWEET_WITH_SENTIMENT = "tweet-with-sentiment"
+    }
+
+    //This object holds the spout and bolt names
+    object BOLT_NAMES {
+        const val TWEET_SPOUT = "tweet-spout"
+        const val TWEET_SENTIMENT_BOLT = "tweet-sentiment-bolt"
+    }
+
+    //This is the list of all languages whose tweets we should obtain
+    @JvmField
+    val LANGUAGES = arrayOf("en")
+
+    //This is the list of all positive topics with respect to the event
+    @JvmField
+    val POSITIVE_TOPICS = arrayOf("modi", "bjp")
+
+    //This is the list of all negative topics with respect to the event
+    @JvmField
+    val NEGATIVE_TOPICS = arrayOf("congress", "jds")
+
+    //This is the list of all topics with respect to the event
+    @JvmStatic
+    fun ALL_TOPICS(): Array<String> {
+        return POSITIVE_TOPICS + NEGATIVE_TOPICS
+    }
 }
