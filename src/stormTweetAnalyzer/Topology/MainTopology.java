@@ -1,4 +1,4 @@
-package tweet4analysis.Topology;
+package stormTweetAnalyzer.Topology;
 
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
@@ -8,9 +8,9 @@ import org.apache.storm.generated.AuthorizationException;
 import org.apache.storm.generated.InvalidTopologyException;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.utils.Utils;
-import tweet4analysis.Bolt.SentimentCalculatorBolt;
-import tweet4analysis.Spout.TweetSpout;
-import tweet4analysis.Utils.Constants;
+import stormTweetAnalyzer.Bolt.SentimentCalculatorBolt;
+import stormTweetAnalyzer.Spout.TweetSpout;
+import stormTweetAnalyzer.Utils.Constants;
 
 public class MainTopology {
 

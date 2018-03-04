@@ -1,4 +1,4 @@
-package tweet4analysis.Bolt;
+package stormTweetAnalyzer.Bolt;
 
 import opennlp.tools.tokenize.SimpleTokenizer;
 import org.apache.storm.task.OutputCollector;

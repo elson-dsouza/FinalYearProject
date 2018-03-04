@@ -1,4 +1,4 @@
-package tweet4analysis.Spout;
+package stormTweetAnalyzer.Spout;
 
 import org.apache.storm.Config;
 import org.apache.storm.spout.SpoutOutputCollector;
@@ -8,7 +8,7 @@ import org.apache.storm.topology.base.BaseRichSpout;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
 import org.apache.storm.utils.Utils;
-import tweet4analysis.Utils.Constants;
+import stormTweetAnalyzer.Utils.Constants;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 
@@ -19,6 +19,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Created by elson on 14/11/17.
  */
 
+@Deprecated
 public class TweetSpout extends BaseRichSpout {
 
     // To output tuples from spout to the next stage bolt
@@ -39,11 +40,11 @@ public class TweetSpout extends BaseRichSpout {
         mCollector = spoutOutputCollector;
 
         // build the config with credentials for twitter 4j
-        ConfigurationBuilder config = new ConfigurationBuilder()
-                        .setOAuthConsumerKey(Constants.OAUTH_CONSUMER_KEY)
-                        .setOAuthConsumerSecret(Constants.OAUTH_CONSUMER_SECRET)
-                        .setOAuthAccessToken(Constants.OAUTH_ACCESS_TOKEN)
-                        .setOAuthAccessTokenSecret(Constants.OAUTH_ACCESS_TOKEN_SECRET);
+        ConfigurationBuilder config = new ConfigurationBuilder();
+//                        .setOAuthConsumerKey(Constants.OAUTH_CONSUMER_KEY)
+//                        .setOAuthConsumerSecret(Constants.OAUTH_CONSUMER_SECRET)
+//                        .setOAuthAccessToken(Constants.OAUTH_ACCESS_TOKEN)
+//                        .setOAuthAccessTokenSecret(Constants.OAUTH_ACCESS_TOKEN_SECRET);
 
         // create the twitter stream factory with the config
         TwitterStreamFactory twitterStreamFactory = new TwitterStreamFactory(config.build());
@@ -55,8 +56,8 @@ public class TweetSpout extends BaseRichSpout {
         mTwitterStream.addListener(new TweetListener());
 
         FilterQuery tweetFilterQuery = new FilterQuery();
-        tweetFilterQuery.track(Constants.ALL_TOPICS());
-        tweetFilterQuery.language(Constants.LANGUAGES);
+//        tweetFilterQuery.track(Constants.TOPIC);
+//        tweetFilterQuery.language(Constants.LANGUAGES);
         mTwitterStream.filter(tweetFilterQuery);
     }
 

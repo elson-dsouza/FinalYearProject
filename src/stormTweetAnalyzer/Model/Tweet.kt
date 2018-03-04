@@ -1,4 +1,4 @@
-package tweet4analysis.Model
+package stormTweetAnalyzer.Model
 
 import twitter4j.Status
 

@@ -1,4 +1,4 @@
-package tweet4analysis.Bolt;
+package stormTweetAnalyzer.Bolt;
 
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
@@ -7,9 +7,9 @@ import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
-import tweet4analysis.Model.Tweet;
-import tweet4analysis.SentimentAnalyzer.SentimentAnalyzer;
-import tweet4analysis.Utils.Constants;
+import stormTweetAnalyzer.Model.Tweet;
+import stormTweetAnalyzer.SentimentAnalyzer.SentimentAnalyzer;
+import stormTweetAnalyzer.Utils.Constants;
 import twitter4j.Status;
 import twitter4j.URLEntity;
 

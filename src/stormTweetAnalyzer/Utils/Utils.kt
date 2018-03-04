@@ -1,4 +1,4 @@
-package tweet4analysis.Utils
+package stormTweetAnalyzer.Utils
 
 import java.io.BufferedReader
 import java.io.IOException

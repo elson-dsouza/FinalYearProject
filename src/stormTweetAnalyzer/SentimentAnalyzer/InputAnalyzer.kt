@@ -1,4 +1,4 @@
-package tweet4analysis.SentimentAnalyzer
+package stormTweetAnalyzer.SentimentAnalyzer
 
 import org.apache.lucene.analysis.Tokenizer
 import org.apache.lucene.analysis.core.WhitespaceTokenizer

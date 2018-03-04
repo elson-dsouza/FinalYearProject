@@ -1,4 +1,4 @@
-package tweet4analysis.Utils
+package stormTweetAnalyzer.Utils
 
 /**
  * Created by elson on 11/2/18.
@@ -11,17 +11,6 @@ object Constants {
 
     //Properties file which has all the configurable parameters required for execution of this Topology.
     const val CONFIG_PROPERTIES_FILE = "config.properties"
-
-    /**
-     * In order to create the spout, you need to get twitter credentials
-     * If you need to use Twitter Firehose / Tweet stream for your idea,
-     * create a set of credentials by following the instructions at
-     * https://dev.twitter.com/discussions/631
-     */
-    const val OAUTH_ACCESS_TOKEN = "707193271085195264-fq4yVwn1zvJPxKBlxjOUAaiVkXFp5ew"
-    const val OAUTH_ACCESS_TOKEN_SECRET = "VsZnHrtCQVWr3UZHxB6eWrn4u4H1Ptl7NM0BEIc1M0G5J"
-    const val OAUTH_CONSUMER_KEY = "SHo4lHNWxFvRFMs4XRoFFHXqi"
-    const val OAUTH_CONSUMER_SECRET = "R3ZX67z2nnPkiPv7TQ45Ajxx6foN2LmnuMhfCfBR8v0IY3fclY"
 
     //Sentiment scores of few words are present in this file.
     //For more info on this, please check:
@@ -77,21 +66,4 @@ object Constants {
         const val TWEET_SENTIMENT_BOLT = "tweet-sentiment-bolt"
     }
 
-    //This is the list of all languages whose tweets we should obtain
-    @JvmField
-    val LANGUAGES = arrayOf("en")
-
-    //This is the list of all positive topics with respect to the event
-    @JvmField
-    val POSITIVE_TOPICS = arrayOf("modi", "bjp")
-
-    //This is the list of all negative topics with respect to the event
-    @JvmField
-    val NEGATIVE_TOPICS = arrayOf("congress", "jds")
-
-    //This is the list of all topics with respect to the event
-    @JvmStatic
-    fun ALL_TOPICS(): Array<String> {
-        return POSITIVE_TOPICS + NEGATIVE_TOPICS
-    }
 }

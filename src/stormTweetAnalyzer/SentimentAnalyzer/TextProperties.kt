@@ -1,6 +1,6 @@
-package tweet4analysis.SentimentAnalyzer
+package stormTweetAnalyzer.SentimentAnalyzer
 
-import tweet4analysis.Utils.Utils
+import stormTweetAnalyzer.Utils.Utils
 import java.io.IOException
 import java.util.*
 

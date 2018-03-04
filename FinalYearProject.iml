@@ -17,5 +17,8 @@
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
     <orderEntry type="library" name="org.apache.lucene:lucene-analyzers-common:7.2.0" level="project" />
     <orderEntry type="library" name="junit:junit:4.12" level="project" />
+    <orderEntry type="library" name="com.twitter:hbc-core:2.2.0" level="project" />
+    <orderEntry type="library" name="org.apache.kafka:kafka_2.12:1.0.0" level="project" />
+    <orderEntry type="library" name="com.google.code.gson:gson:2.8.2" level="project" />
   </component>
 </module>

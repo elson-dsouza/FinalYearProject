@@ -1,0 +1,27 @@
+<component name="libraryTable">
+  <library name="org.apache.kafka:kafka_2.12:1.0.0" type="repository">
+    <properties maven-id="org.apache.kafka:kafka_2.12:1.0.0" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/kafka_2.12-1.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/kafka-clients-1.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/lz4-java-1.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/snappy-java-1.1.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-api-1.7.25.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jackson-databind-2.9.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jackson-annotations-2.9.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jackson-core-2.9.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jopt-simple-5.0.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/metrics-core-2.2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/scala-library-2.12.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-log4j12-1.7.25.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/log4j-1.2.17.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/zkclient-0.10.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/zookeeper-3.4.10.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jline-0.9.94.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/junit-3.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/netty-3.10.5.Final.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
