@@ -1,6 +1,6 @@
 package stormTweetAnalyzer.SentimentAnalyzer
 
-import stormTweetAnalyzer.Utils.Utils
+import Utils.Utils
 import java.io.IOException
 import java.util.*
 

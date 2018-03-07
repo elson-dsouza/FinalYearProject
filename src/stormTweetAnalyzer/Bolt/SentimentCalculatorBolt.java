@@ -1,5 +1,6 @@
 package stormTweetAnalyzer.Bolt;
 
+import Utils.Constants;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
@@ -9,7 +10,6 @@ import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 import stormTweetAnalyzer.Model.Tweet;
 import stormTweetAnalyzer.SentimentAnalyzer.SentimentAnalyzer;
-import stormTweetAnalyzer.Utils.Constants;
 import twitter4j.Status;
 import twitter4j.URLEntity;
 

@@ -1,10 +1,10 @@
 package stormTweetAnalyzer.SentimentAnalyzer
 
+import Utils.Constants
+import Utils.SentimentModifyingTokens
+import Utils.Utils
+import Utils.Valence
 import org.apache.storm.shade.org.apache.commons.lang.StringUtils
-import stormTweetAnalyzer.Utils.Constants
-import stormTweetAnalyzer.Utils.SentimentModifyingTokens
-import stormTweetAnalyzer.Utils.Utils
-import stormTweetAnalyzer.Utils.Valence
 import java.util.*
 
 

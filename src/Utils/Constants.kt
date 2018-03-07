@@ -1,4 +1,4 @@
-package stormTweetAnalyzer.Utils
+package Utils
 
 /**
  * Created by elson on 11/2/18.
@@ -56,6 +56,7 @@ object Constants {
 
     //This object holds the list of Emitted Tuple names
     object EMITTED_TUPLES {
+        const val TWEET_JSON = "tweet-json"
         const val RAW_TWEET = "raw-tweet"
         const val TWEET_WITH_SENTIMENT = "tweet-with-sentiment"
     }
@@ -63,7 +64,27 @@ object Constants {
     //This object holds the spout and bolt names
     object BOLT_NAMES {
         const val TWEET_SPOUT = "tweet-spout"
+        const val TWEET_KAFKA_SPOUT = "tweet-kafka-spout"
+        const val TWEET_PARSER_BOLT = "tweet-parser-bolt"
         const val TWEET_SENTIMENT_BOLT = "tweet-sentiment-bolt"
     }
 
+    /**
+     * In order to create the spout, you need to get twitter credentials
+     * If you need to use Twitter Firehose / Tweet stream for your idea,
+     * create a set of credentials by following the instructions at
+     * https://dev.twitter.com/discussions/631
+     */
+    const val OAUTH_ACCESS_TOKEN = "707193271085195264-fq4yVwn1zvJPxKBlxjOUAaiVkXFp5ew"
+    const val OAUTH_ACCESS_TOKEN_SECRET = "VsZnHrtCQVWr3UZHxB6eWrn4u4H1Ptl7NM0BEIc1M0G5J"
+    const val OAUTH_CONSUMER_KEY = "SHo4lHNWxFvRFMs4XRoFFHXqi"
+    const val OAUTH_CONSUMER_SECRET = "R3ZX67z2nnPkiPv7TQ45Ajxx6foN2LmnuMhfCfBR8v0IY3fclY"
+    const val KAFKA_TOPIC = "kafka.twitter.raw.topic"
+
+    @JvmField
+    val LANGUAGES = arrayOf("en")
+    @JvmField
+    val TOPIC = arrayOf("modi", "bjp")
+
+    const val ZOOKEEPER_HOST = "localhost:2181"
 }

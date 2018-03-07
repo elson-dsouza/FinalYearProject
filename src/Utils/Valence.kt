@@ -1,4 +1,4 @@
-package stormTweetAnalyzer.Utils
+package Utils
 
 /**
  * Created by elson on 11/2/18.

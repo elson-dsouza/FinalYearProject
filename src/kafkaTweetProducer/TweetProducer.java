@@ -1,5 +1,6 @@
 package kafkaTweetProducer;
 
+import Utils.Constants;
 import com.google.gson.Gson;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -20,10 +21,10 @@ public class TweetProducer {
 
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey(Const.OAUTH_CONSUMER_KEY)
-                .setOAuthConsumerSecret(Const.OAUTH_CONSUMER_SECRET)
-                .setOAuthAccessToken(Const.OAUTH_ACCESS_TOKEN)
-                .setOAuthAccessTokenSecret(Const.OAUTH_ACCESS_TOKEN_SECRET);
+                .setOAuthConsumerKey(Constants.OAUTH_CONSUMER_KEY)
+                .setOAuthConsumerSecret(Constants.OAUTH_CONSUMER_SECRET)
+                .setOAuthAccessToken(Constants.OAUTH_ACCESS_TOKEN)
+                .setOAuthAccessTokenSecret(Constants.OAUTH_ACCESS_TOKEN_SECRET);
 
         TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
 
@@ -62,8 +63,8 @@ public class TweetProducer {
         twitterStream.addListener(tweetListener);
 
         FilterQuery tweetFilterQuery = new FilterQuery();
-        tweetFilterQuery.track(Const.TOPIC);
-        tweetFilterQuery.language(Const.LANGUAGES);
+        tweetFilterQuery.track(Constants.TOPIC);
+        tweetFilterQuery.language(Constants.LANGUAGES);
         twitterStream.filter(tweetFilterQuery);
 
         //Add Kafka producer config settings
@@ -94,7 +95,7 @@ public class TweetProducer {
                     e.printStackTrace();
                 }
             } else {
-                producer.send(new ProducerRecord<>(Const.KAFKA_TOPIC, gson.toJson(tweet)));
+                producer.send(new ProducerRecord<>(Constants.KAFKA_TOPIC, gson.toJson(tweet)));
             }
         }
     }

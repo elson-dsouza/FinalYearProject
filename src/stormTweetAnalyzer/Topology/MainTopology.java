@@ -1,34 +1,52 @@
 package stormTweetAnalyzer.Topology;
 
+import Utils.Constants;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
 import org.apache.storm.generated.AlreadyAliveException;
 import org.apache.storm.generated.AuthorizationException;
 import org.apache.storm.generated.InvalidTopologyException;
+import org.apache.storm.kafka.KafkaSpout;
+import org.apache.storm.kafka.SpoutConfig;
+import org.apache.storm.kafka.StringScheme;
+import org.apache.storm.kafka.ZkHosts;
+import org.apache.storm.spout.SchemeAsMultiScheme;
 import org.apache.storm.topology.TopologyBuilder;
+import org.apache.storm.tuple.Fields;
 import org.apache.storm.utils.Utils;
+import stormTweetAnalyzer.Bolt.ParseTweetBolt;
 import stormTweetAnalyzer.Bolt.SentimentCalculatorBolt;
-import stormTweetAnalyzer.Spout.TweetSpout;
-import stormTweetAnalyzer.Utils.Constants;
 
 public class MainTopology {
 
     public static void main(String[] args) {
+
+        ZkHosts zookeeperHosts = new ZkHosts(Constants.ZOOKEEPER_HOST);
+        SpoutConfig kafkaConfig = new SpoutConfig(zookeeperHosts, Constants.KAFKA_TOPIC
+                , "", Constants.BOLT_NAMES.TWEET_KAFKA_SPOUT);
+
+        kafkaConfig.scheme = new SchemeAsMultiScheme(new StringScheme() {
+            @Override
+            public Fields getOutputFields() {
+                return new Fields(Constants.EMITTED_TUPLES.TWEET_JSON);
+            }
+        });
 
         // create the topology
         TopologyBuilder builder = new TopologyBuilder();
 
         // now create the tweet spout with the credentials and
         // attach the tweet spout to the topology - parallelism of 1
-        builder.setSpout(Constants.BOLT_NAMES.TWEET_SPOUT, new TweetSpout(), 1);
+        builder.setSpout(Constants.BOLT_NAMES.TWEET_KAFKA_SPOUT, new KafkaSpout(kafkaConfig),
+                8);
+        builder.setBolt(Constants.BOLT_NAMES.TWEET_PARSER_BOLT, new ParseTweetBolt(),
+                8).shuffleGrouping(Constants.BOLT_NAMES.TWEET_KAFKA_SPOUT);
         builder.setBolt(Constants.BOLT_NAMES.TWEET_SENTIMENT_BOLT, new SentimentCalculatorBolt(),
-                10)
-                .shuffleGrouping(Constants.BOLT_NAMES.TWEET_SPOUT);
+                8).shuffleGrouping(Constants.BOLT_NAMES.TWEET_PARSER_BOLT);
 
         // create the default config object
         Config conf = new Config();
-
         // set the config in debugging mode
         conf.setDebug(true);
 

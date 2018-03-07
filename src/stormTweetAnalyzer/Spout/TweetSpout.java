@@ -1,5 +1,6 @@
 package stormTweetAnalyzer.Spout;
 
+import Utils.Constants;
 import org.apache.storm.Config;
 import org.apache.storm.spout.SpoutOutputCollector;
 import org.apache.storm.task.TopologyContext;
@@ -8,7 +9,6 @@ import org.apache.storm.topology.base.BaseRichSpout;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
 import org.apache.storm.utils.Utils;
-import stormTweetAnalyzer.Utils.Constants;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 

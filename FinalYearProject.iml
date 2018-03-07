@@ -20,5 +20,6 @@
     <orderEntry type="library" name="com.twitter:hbc-core:2.2.0" level="project" />
     <orderEntry type="library" name="org.apache.kafka:kafka_2.12:1.0.0" level="project" />
     <orderEntry type="library" name="com.google.code.gson:gson:2.8.2" level="project" />
+    <orderEntry type="library" name="org.apache.storm:storm-kafka:1.2.1" level="project" />
   </component>
 </module>
