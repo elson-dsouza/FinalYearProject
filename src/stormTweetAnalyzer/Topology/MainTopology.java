@@ -35,7 +35,6 @@ public class MainTopology {
 
         // create the topology
         TopologyBuilder builder = new TopologyBuilder();
-
         // now create the tweet spout with the credentials and
         // attach the tweet spout to the topology - parallelism of 1
         builder.setSpout(Constants.BOLT_NAMES.TWEET_KAFKA_SPOUT, new KafkaSpout(kafkaConfig),
@@ -76,8 +75,8 @@ public class MainTopology {
             // submit the topology to the local cluster
             cluster.submitTopology(Constants.TOPOLOGY_NAME, conf, builder.createTopology());
 
-            // let the topology run for 300 seconds. note topologies never terminate!
-            Utils.sleep(300000);
+            // let the topology run for 1 hour. note topologies never terminate!
+            Utils.sleep(3600000);
 
             // now kill the topology
             cluster.killTopology(Constants.TOPOLOGY_NAME);
