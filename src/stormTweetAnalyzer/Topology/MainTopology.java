@@ -15,7 +15,7 @@ import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.utils.Utils;
 import stormTweetAnalyzer.Bolt.ParseTweetBolt;
-import stormTweetAnalyzer.Bolt.SentimentCalculatorBolt;
+import stormTweetAnalyzer.Bolt.TweetPotentialBolt;
 import utils.Constants;
 
 public class MainTopology {
@@ -41,7 +41,7 @@ public class MainTopology {
                 8);
         builder.setBolt(Constants.BOLT_OR_SPOUT_NAMES.TWEET_PARSER_BOLT, new ParseTweetBolt(),
                 8).shuffleGrouping(Constants.BOLT_OR_SPOUT_NAMES.TWEET_KAFKA_SPOUT);
-        builder.setBolt(Constants.BOLT_OR_SPOUT_NAMES.TWEET_SENTIMENT_BOLT, new SentimentCalculatorBolt(),
+        builder.setBolt(Constants.BOLT_OR_SPOUT_NAMES.TWEET_POTENTIAL_BOLT, new TweetPotentialBolt(),
                 8).shuffleGrouping(Constants.BOLT_OR_SPOUT_NAMES.TWEET_PARSER_BOLT);
 
         // create the default config object

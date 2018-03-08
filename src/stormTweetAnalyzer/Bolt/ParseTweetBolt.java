@@ -9,6 +9,8 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 import twitter4j.Status;
+import twitter4j.TwitterException;
+import twitter4j.TwitterObjectFactory;
 import utils.Constants;
 
 import java.util.Map;
@@ -34,7 +36,12 @@ public class ParseTweetBolt extends BaseRichBolt {
     public void execute(final Tuple input)
     {
         final String tweetJson = (String) input.getValueByField(Constants.EMITTED_TUPLE_NAMES.TWEET_JSON);
-        Status status = gson.fromJson(tweetJson, Status.class);
+        Status status = null;
+        try {
+            status = TwitterObjectFactory.createStatus(tweetJson);
+        } catch (TwitterException e) {
+            e.printStackTrace();
+        }
         collector.emit(new Values(status));
     }
 

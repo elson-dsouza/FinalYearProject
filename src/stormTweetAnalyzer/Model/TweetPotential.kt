@@ -5,4 +5,4 @@ import twitter4j.Status
 /**
  * Created by elson on 12/2/18.
  */
-class Tweet(val status: Status, val preProcessedTweet: String, val sentiment: Float)
+class TweetPotential(val status: Status, val preProcessedTweet: String, val sentiment: Float)

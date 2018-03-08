@@ -1,4 +1,3 @@
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import stormTweetAnalyzer.SentimentAnalyzer.SentimentAnalyzer
@@ -17,8 +16,12 @@ class TestSentimentAnalyzer {
     @Test
     fun test() {
         //TODO: Write some unit tests
-        Assert.assertTrue(sentimentAnalyzer.analyze("This is :)") > 0)
-        Assert.assertTrue(sentimentAnalyzer.analyze("This is horrific") < 0)
-        Assert.assertTrue(sentimentAnalyzer.analyze("Indian team on fire!! boys playing well") > 0)
+        System.out.println(sentimentAnalyzer.analyze("This is :)"))
+        System.out.println(sentimentAnalyzer.analyze("This is horrific"))
+
+        System.out.println(sentimentAnalyzer.analyze(
+                "RT @siddaramaiah: I am shocked by the vandalism displayed by BJP " +
+                        "workers in desecrating #PeriyarStatue . Why is the @BJP4India afraid of " +
+                        "th…"))
     }
 }

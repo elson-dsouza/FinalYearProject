@@ -7,7 +7,7 @@ package utils
  */
 object Constants {
     // Name of the Topology. Used while launching the LocalCluster
-    const val TOPOLOGY_NAME = "SentimentAnalysis"
+    const val TOPOLOGY_NAME = "EventPrediction"
 
     // Max allowed question marks in a string. Beyond this value the affect of the
     // Question marks will be considered the same.
@@ -31,13 +31,15 @@ object Constants {
     object EMITTED_TUPLE_NAMES {
         const val TWEET_JSON = "tweet-json"
         const val RAW_TWEET = "raw-tweet"
-        const val TWEET_WITH_SENTIMENT = "tweet-with-sentiment"
+        const val TWEET_POTENTIAL = "tweet-potential"
+        const val TOPIC_POTENTIAL = "topic-potential"
     }
 
     object BOLT_OR_SPOUT_NAMES {
         const val TWEET_KAFKA_SPOUT = "tweet-kafka-spout"
         const val TWEET_PARSER_BOLT = "tweet-parser-bolt"
-        const val TWEET_SENTIMENT_BOLT = "tweet-sentiment-bolt"
+        const val TWEET_POTENTIAL_BOLT = "tweet-potential-bolt"
+        const val TOPIC_POTENTIAL_BOLT = "topic-potential-bolt"
     }
 
     // In order to create the spout, we need to get twitter credentials
