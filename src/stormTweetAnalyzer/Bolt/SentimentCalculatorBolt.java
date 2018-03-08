@@ -1,6 +1,5 @@
 package stormTweetAnalyzer.Bolt;
 
-import Utils.Constants;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
@@ -12,6 +11,7 @@ import stormTweetAnalyzer.Model.Tweet;
 import stormTweetAnalyzer.SentimentAnalyzer.SentimentAnalyzer;
 import twitter4j.Status;
 import twitter4j.URLEntity;
+import utils.Constants;
 
 import java.util.Map;
 
@@ -33,12 +33,12 @@ public final class SentimentCalculatorBolt extends BaseRichBolt {
     public final void declareOutputFields(final OutputFieldsDeclarer outputFieldsDeclarer) {
         // tell storm the schema of the output tuple for this spout
         // tuple consists of a single column called 'tweet-word'
-        outputFieldsDeclarer.declare(new Fields(Constants.EMITTED_TUPLES.TWEET_WITH_SENTIMENT));
+        outputFieldsDeclarer.declare(new Fields(Constants.EMITTED_TUPLE_NAMES.TWEET_WITH_SENTIMENT));
     }
 
     @Override
     public final void execute(final Tuple input) {
-        final Status status = (Status) input.getValueByField(Constants.EMITTED_TUPLES.RAW_TWEET);
+        final Status status = (Status) input.getValueByField(Constants.EMITTED_TUPLE_NAMES.RAW_TWEET);
         final String tweetProcessed = preProcessTweet(status);
         SentimentAnalyzer sentimentAnalyzer = new SentimentAnalyzer();
 

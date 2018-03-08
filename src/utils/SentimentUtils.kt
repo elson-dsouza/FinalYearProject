@@ -1,4 +1,4 @@
-package Utils
+package utils
 
 import java.io.BufferedReader
 import java.io.IOException
@@ -6,52 +6,41 @@ import java.io.InputStreamReader
 import java.util.*
 
 /**
+ * This object contains the constants that are the used by the sentiment analyzer.
+ * The constants are same as the ones used in the official implementation which can be found at
+ * http://www.nltk.org/_modules/nltk/sentiment/vader.html
+ *
  * Created by elson on 11/2/18.
- *
- * This class contains the constants that are the used by the sentiment analyzer.
- * The constants are same as the ones used in the official python implementation
- *
- * @see [NLTK Source](http://www.nltk.org/_modules/nltk/sentiment/vader.html)
- *
- * @see [vaderSentiment Python module]
- * (https://github.com/cjhutto/vaderSentiment/blob/master/vaderSentiment/vaderSentiment.py)
  */
-object Utils {
-    //Class loader to get the path to the resources folder.
-    private val CLASS_LOADER = Utils::class.java.classLoader
+object SentimentUtils {
+    // Class loader to get the path to the resources folder.
+    private val CLASS_LOADER = SentimentUtils::class.java.classLoader
 
-    //List of possible punctuation marks.
-    private val PUNCTUATION_LIST_ARRAY = arrayOf(".", "!", "?", ",", ";", ":", "-", "'", "\"", "!!",
+    // List of possible punctuation marks.
+    val PUNCTUATION_LIST = arrayOf(".", "!", "?", ",", ";", ":", "-", "'", "\"", "!!",
             "!!!", "??", "???", "?!?", "!?!", "?!?!", "!?!?")
 
-    //Array of negating words.
-    private val NEGATIVE_WORDS_ARRAY = arrayOf("aint", "arent", "cannot", "cant", "couldnt",
+    // Hash set of all negating words.
+    val NEGATIVE_WORDS = HashSet(Arrays.asList("aint", "arent", "cannot", "cant", "couldnt",
             "darent", "didnt", "doesnt", "ain't", "aren't", "can't", "couldn't", "daren't",
             "didn't", "doesn't", "dont", "hadnt", "hasnt", "havent", "isnt", "mightnt", "mustnt",
             "neither", "don't", "hadn't", "hasn't", "haven't", "isn't", "mightn't", "mustn't",
             "neednt", "needn't", "never", "none", "nope", "nor", "not", "nothing", "nowhere",
             "oughtnt", "shant", "shouldnt", "uhuh", "wasnt", "werent", "oughtn't", "shan't",
             "shouldn't", "uh-uh", "wasn't", "weren't", "without", "wont", "wouldnt", "won't",
-            "wouldn't", "rarely", "seldom", "despite")
+            "wouldn't", "rarely", "seldom", "despite"))
 
-    //List of {@link Utils#PUNCTUATION_LIST_ARRAY}.
-    @JvmField
-    val PUNCTUATION_LIST = ArrayList(Arrays.asList(*PUNCTUATION_LIST_ARRAY))
-
-    //Converting {@link Utils#NEGATIVE_WORDS_ARRAY} to a set.
-    @JvmField
-    val NEGATIVE_WORDS: Set<String> = HashSet(Arrays.asList(*NEGATIVE_WORDS_ARRAY))
-
-    //This dictionary holds a token and its corresponding boosting/dampening
-    //factor for sentiment scoring.
+    // This dictionary holds a token and its corresponding boosting/dampening
+    // factor for sentiment scoring.
     val BoosterDictionary = HashMap<String, Float>()
 
-    //Idioms with their respective valencies.
+    // Idioms with their respective valencies.
     val SentimentLadenIdioms = HashMap<String, Float>()
 
-    //Tokens with their respective valencies.
+    // Tokens with their respective valencies.
     val WordValenceDictionary: Map<String, Float> = readLexiconFile()
 
+    //Constructor invoked
     init {
         BoosterDictionary["decidedly"] = Valence.DEFAULT_BOOSTING.value
         BoosterDictionary["uber"] = Valence.DEFAULT_BOOSTING.value
@@ -118,9 +107,7 @@ object Utils {
         BoosterDictionary["entirely"] = Valence.DEFAULT_BOOSTING.value
         BoosterDictionary["slightly"] = Valence.DEFAULT_DAMPING.value
         BoosterDictionary["effing"] = Valence.DEFAULT_BOOSTING.value
-    }
 
-    init {
         SentimentLadenIdioms["cut the mustard"] = 2f
         SentimentLadenIdioms["bad ass"] = 1.5f
         SentimentLadenIdioms["kiss of death"] = -1.5f
@@ -132,16 +119,16 @@ object Utils {
 
     /**
      * This function returns false if the input token:
-     * 1. is a URL starting with "http://" or "HTTP://"
+     * 1. is a URL
      * 2. is a number as string
      * 3. has one character in lower case
      *
      * @param token input token
-     * @return true iff none of the above conditions occur
+     * @return true if none of the above conditions occur
      */
     fun isUpper(token: String): Boolean {
-        if (token.toLowerCase().startsWith(Constants.URL_PREFIX)) {
-            return false
+        Constants.URL_PREFIXES.forEach {
+            if(token.toLowerCase().startsWith(it)) return false
         }
         if (!token.matches(Constants.NON_NUMERIC_STRING_REGEX.toRegex())) {
             return false
@@ -156,7 +143,7 @@ object Utils {
      * @return map of lexicons with their corresponding valence
      */
     private fun readLexiconFile(): Map<String, Float> {
-        val lexFile = CLASS_LOADER.getResourceAsStream(Constants.VADER_FILE)
+        val lexFile = CLASS_LOADER.getResourceAsStream(Constants.VADER_FILE_PATH)
         val lexDictionary = HashMap<String, Float>()
         if (lexFile != null) {
             try {

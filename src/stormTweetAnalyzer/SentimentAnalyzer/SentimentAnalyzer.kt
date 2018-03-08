@@ -1,14 +1,16 @@
 package stormTweetAnalyzer.SentimentAnalyzer
 
-import Utils.Constants
-import Utils.SentimentModifyingTokens
-import Utils.Utils
-import Utils.Valence
 import org.apache.storm.shade.org.apache.commons.lang.StringUtils
+import utils.Constants
+import utils.SentimentModifyingTokens
+import utils.SentimentUtils
+import utils.Valence
 import java.util.*
 
 
 /**
+ * This class performs the sentiment analysis of the given tweet using VADER
+ *
  * Created by elson on 11/2/18.
  */
 class SentimentAnalyzer {
@@ -20,15 +22,15 @@ class SentimentAnalyzer {
      * This section performs the following evaluation:
      *
      * If the term at currentItemPosition is followed by "kind of" or the it is present in
-     * [Utils.BoosterDictionary], add the currentValence to sentiment array and break
-     * to the next loop.
+     * [SentimentUtils.BoosterDictionary], add the currentValence to sentiment array
+     * and break to the next loop.
      *
      * If currentValence was 0.0, then current word's valence will also be 0.0.
      *
-     * If current item in lowercase is in [Utils.WordValenceDictionary]...
-     *
-     * If current item is all in uppercase and the input string has yelling words,
-     * accordingly adjust currentValence.
+     * If current item in lowercase is in [SentimentUtils.WordValenceDictionary] perform the
+     * following operation:
+     *      If current item is all in uppercase and the input string has yelling words,
+     *      accordingly adjust currentValence.
      */
     private val tokenWiseSentiment: List<Float>
         get() {
@@ -44,15 +46,15 @@ class SentimentAnalyzer {
                                 && currentItemLower == SentimentModifyingTokens.KIND.value
                                 && wordsAndEmoticons[currentItemPosition + 1].toLowerCase()
                                 == SentimentModifyingTokens.OF.value)
-                        || Utils.BoosterDictionary.containsKey(currentItemLower)) {
+                        || SentimentUtils.BoosterDictionary.containsKey(currentItemLower)) {
                     sentiments.add(currentValence)
                     continue
                 }
 
-                if (Utils.WordValenceDictionary.containsKey(currentItemLower)) {
-                    currentValence = Utils.WordValenceDictionary[currentItemLower]!!
+                if (SentimentUtils.WordValenceDictionary.containsKey(currentItemLower)) {
+                    currentValence = SentimentUtils.WordValenceDictionary[currentItemLower]!!
 
-                    if (Utils.isUpper(currentItem) && inputStringProperties!!.isCapDiff) {
+                    if (SentimentUtils.isUpper(currentItem) && inputStringProperties!!.isCapDiff) {
                         if (currentValence > 0.0) {
                             currentValence += Valence.ALL_CAPS_FACTOR.value
                         } else {
@@ -68,7 +70,7 @@ class SentimentAnalyzer {
                                     Math.abs(closeTokenIndex)
                         }
 
-                        if (currentItemPosition > distance && !Utils.WordValenceDictionary
+                        if (currentItemPosition > distance && !SentimentUtils.WordValenceDictionary
                                         .containsKey(wordsAndEmoticons[closeTokenIndex]
                                                 .toLowerCase())) {
 
@@ -103,7 +105,7 @@ class SentimentAnalyzer {
 
     /**
      * This is the main function.
-     * This triggers all the sentiment scoring on the [SentimentAnalyzer.inputString].
+     * This triggers all the sentiment scoring on the [inputString].
      */
     fun analyze(inputString: String): Float {
         inputStringProperties = TextProperties(inputString)
@@ -112,7 +114,9 @@ class SentimentAnalyzer {
     }
 
     /**
-     * Adjust valence if a token is in [Utils.BoosterDictionary] or is a yelling word (all caps).
+     * Adjust valence if a token is in [SentimentUtils.BoosterDictionary] or is a yelling
+     * word (all caps).
+     *
      * @param precedingToken token
      * @param currentValence valence to be adjusted
      * @return adjusted valence
@@ -120,12 +124,12 @@ class SentimentAnalyzer {
     private fun valenceModifier(precedingToken: String, currentValence: Float): Float {
         var scalar = 0.0f
         val precedingWordLower = precedingToken.toLowerCase()
-        if (Utils.BoosterDictionary.containsKey(precedingWordLower)) {
-            scalar = Utils.BoosterDictionary[precedingWordLower]!!
+        if (SentimentUtils.BoosterDictionary.containsKey(precedingWordLower)) {
+            scalar = SentimentUtils.BoosterDictionary[precedingWordLower]!!
             if (currentValence < 0.0f) {
                 scalar = -scalar
             }
-            if (Utils.isUpper(precedingToken) && inputStringProperties!!.isCapDiff) {
+            if (SentimentUtils.isUpper(precedingToken) && inputStringProperties!!.isCapDiff) {
                 if (currentValence > 0.0f) {
                     scalar += Valence.ALL_CAPS_FACTOR.value
                 } else {
@@ -141,6 +145,7 @@ class SentimentAnalyzer {
      * - "never so current_word"
      * - "never this current_word"
      * - "never so this" etc.
+     *
      * @param currentValence valence before
      * @param distance gram window size
      * @param currentItemPosition position of the current token
@@ -190,8 +195,10 @@ class SentimentAnalyzer {
     }
 
     /**
-     * Search if the any bi-gram/tri-grams around the currentItemPosition contains any idioms defined
-     * in [Utils.SentimentLadenIdioms]. Adjust the current valence if there are any idioms found.
+     * Search if the any bi-gram/tri-grams around the currentItemPosition contains any
+     * idioms defined in [SentimentUtils.SentimentLadenIdioms]. Adjust the current valence
+     * if there are any idioms found.
+     *
      * @param currentValence      valence
      * @param currentItemPosition current tokens position
      * @return adjusted valence
@@ -247,8 +254,8 @@ class SentimentAnalyzer {
         var tempValence = currentValence
 
         for (leftGramSequence in leftGramSequences) {
-            if (Utils.SentimentLadenIdioms.containsKey(leftGramSequence)) {
-                tempValence = Utils.SentimentLadenIdioms[leftGramSequence]!!
+            if (SentimentUtils.SentimentLadenIdioms.containsKey(leftGramSequence)) {
+                tempValence = SentimentUtils.SentimentLadenIdioms[leftGramSequence]!!
                 break
             }
         }
@@ -260,8 +267,8 @@ class SentimentAnalyzer {
                     wordsAndEmoticons[currentItemPosition + 1]
             )
 
-            if (Utils.SentimentLadenIdioms.containsKey(rightBiGramFromCurrent)) {
-                tempValence = Utils.SentimentLadenIdioms[rightBiGramFromCurrent]!!
+            if (SentimentUtils.SentimentLadenIdioms.containsKey(rightBiGramFromCurrent)) {
+                tempValence = SentimentUtils.SentimentLadenIdioms[rightBiGramFromCurrent]!!
             }
         }
 
@@ -272,13 +279,13 @@ class SentimentAnalyzer {
                     wordsAndEmoticons[currentItemPosition + 1],
                     wordsAndEmoticons[currentItemPosition + 2]
             )
-            if (Utils.SentimentLadenIdioms.containsKey(rightTriGramFromCurrent)) {
-                tempValence = Utils.SentimentLadenIdioms[rightTriGramFromCurrent]!!
+            if (SentimentUtils.SentimentLadenIdioms.containsKey(rightTriGramFromCurrent)) {
+                tempValence = SentimentUtils.SentimentLadenIdioms[rightTriGramFromCurrent]!!
             }
         }
 
-        if (Utils.BoosterDictionary.containsKey(leftBiGramFromTwoPrevious)
-                || Utils.BoosterDictionary.containsKey(leftBiGramFromOnePrevious)) {
+        if (SentimentUtils.BoosterDictionary.containsKey(leftBiGramFromTwoPrevious)
+                || SentimentUtils.BoosterDictionary.containsKey(leftBiGramFromOnePrevious)) {
             tempValence += Valence.DEFAULT_DAMPING.value
         }
 
@@ -286,8 +293,9 @@ class SentimentAnalyzer {
     }
 
     /**
-     * This methods calculates the positive, negative and neutral sentiment from the sentiment values of the input
-     * string.
+     * This methods calculates the positive, negative and neutral sentiment from the sentiment
+     * values of the input string.
+     *
      * @param tokenWiseSentimentState valence of the each token in input string
      * @return the positive, negative and neutral sentiment as an List
      */
@@ -313,6 +321,7 @@ class SentimentAnalyzer {
 
     /**
      * Convert the lower level token wise valence to a higher level polarity scores.
+     *
      * @param tokenWiseSentimentState the tokenwise scores of the input string
      * @return the positive, negative, neutral and compound polarity scores as a map
      */
@@ -320,10 +329,11 @@ class SentimentAnalyzer {
         var result = 0.0f
         if (!tokenWiseSentimentState.isEmpty()) {
 
-            //Compute the total valence.
+            // Compute the total valence.
             var totalValence = tokenWiseSentimentState.sum()
 
-            //Adjust the total valence score on the basis of the punctuations in the input string.
+            // Adjust the total valence score on the basis of the punctuations in the input
+            // string.
             val punctuationAmplifier = boostByPunctuation()
 
             if (totalValence > 0.0f) {
@@ -355,7 +365,7 @@ class SentimentAnalyzer {
     /**
      * This function jointly performs the boosting if input string contains
      * '!'s and/or '?'s and then returns the sum of the boosted scores from
-     * [SentimentAnalyzer.boostByExclamation] and [SentimentAnalyzer.boostByQuestionMark].
+     * [boostByExclamation] and [boostByQuestionMark].
      *
      * @return joint boosted score
      */
@@ -396,7 +406,9 @@ class SentimentAnalyzer {
     }
 
     /**
-     * This methods manages the effect of contrastive conjunctions like "but" on the valence of a token.
+     * This methods manages the effect of contrastive conjunctions like "but" on the valence
+     * of a token.
+     *
      * @param inputTokens list of token and/or emoticons in the input string
      * @param tokenWiseSentimentState current token wise sentiment scores
      * @return adjusted token wise sentiment scores
@@ -422,10 +434,11 @@ class SentimentAnalyzer {
     }
 
     /**
-     * Check for the cases where you have phrases having "least" in the words preceding the token at
-     * currentItemPosition and accordingly adjust the valence.
-     * @param currentItemPosition position of the token in wordsAndEmoticons around which we will search for "least"
-     * type phrases
+     * Check for the cases where you have phrases having "least" in the words preceding the
+     * token at currentItemPosition and accordingly adjust the valence.
+     *
+     * @param currentItemPosition position of the token in wordsAndEmoticons around which we
+     *                            will search for "least" type phrases
      * @param wordsAndEmoticons   list of token and/or emoticons in the input string
      * @param currentValence      valence of the token at currentItemPosition
      * @return adjusted currentValence
@@ -434,7 +447,7 @@ class SentimentAnalyzer {
                                    currentValence: Float): Float {
         var valence = currentValence
         if (currentItemPosition > 1
-                && !Utils.WordValenceDictionary.containsKey(wordsAndEmoticons[currentItemPosition - 1]
+                && !SentimentUtils.WordValenceDictionary.containsKey(wordsAndEmoticons[currentItemPosition - 1]
                         .toLowerCase())
                 && wordsAndEmoticons[currentItemPosition - 1].toLowerCase() ==
                 SentimentModifyingTokens.LEAST.value) {
@@ -445,7 +458,7 @@ class SentimentAnalyzer {
                             SentimentModifyingTokens.VERY.value)) {
                 valence *= Valence.NEGATIVE_WORD_DAMPING_FACTOR.value
             }
-        } else if (currentItemPosition > 0 && !Utils.WordValenceDictionary
+        } else if (currentItemPosition > 0 && !SentimentUtils.WordValenceDictionary
                         .containsKey(wordsAndEmoticons[currentItemPosition - 1].toLowerCase())
                 && wordsAndEmoticons[currentItemPosition - 1] == SentimentModifyingTokens.LEAST.value) {
             valence *= Valence.NEGATIVE_WORD_DAMPING_FACTOR.value
@@ -455,6 +468,7 @@ class SentimentAnalyzer {
 
     /**
      * Check if token has "n't" in the end.
+     *
      * @param token current token
      * @return true if token has "n't" in the end
      */
@@ -463,7 +477,9 @@ class SentimentAnalyzer {
     }
 
     /**
-     * Check if token belongs to a pre-defined list of negative words. e.g. [Utils.NEGATIVE_WORDS].
+     * Check if token belongs to a pre-defined list of negative words
+     * [SentimentUtils.NEGATIVE_WORDS].
+     *
      * @param token current token
      * @param newNegWords set of negative words
      * @return true if token belongs to newNegWords
@@ -473,15 +489,17 @@ class SentimentAnalyzer {
     }
 
     /**
-     * Check if token belongs to a pre-defined list of negative words. e.g. [Utils.NEGATIVE_WORDS]
+     * Check if token belongs to a pre-defined list of negative words
+     * [SentimentUtils.NEGATIVE_WORDS]
      * and also checks if the token has "n't" in the end.
+     *
      * @param token current token
      * @param checkContractions flag to check "n't" in end of token
-     * @return true iff token is in newNegWords or if checkContractions is true,
-     * token should have "n't" in its end
+     * @return  true if token is in newNegWords or if checkContractions is true,
+     *          token should have "n't" in its end
      */
     private fun isNegative(token: String, checkContractions: Boolean = true): Boolean {
-        val result = hasNegativeWord(token, Utils.NEGATIVE_WORDS)
+        val result = hasNegativeWord(token, SentimentUtils.NEGATIVE_WORDS)
         return if (!checkContractions) {
             result
         } else result || hasContraction(token)

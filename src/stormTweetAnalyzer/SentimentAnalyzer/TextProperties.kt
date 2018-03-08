@@ -1,6 +1,6 @@
 package stormTweetAnalyzer.SentimentAnalyzer
 
-import Utils.Utils
+import utils.SentimentUtils
 import java.io.IOException
 import java.util.*
 
@@ -47,7 +47,7 @@ constructor(private val inputText: String) {
      */
     private val isAllCapDifferential: Boolean
         get() {
-            val countAllCaps = wordsAndEmoticons!!.count { Utils.isUpper(it) }
+            val countAllCaps = wordsAndEmoticons!!.count { SentimentUtils.isUpper(it) }
             val capDifferential = wordsAndEmoticons!!.size - countAllCaps
             return 0 < capDifferential && capDifferential < wordsAndEmoticons!!.size
         }
@@ -70,7 +70,7 @@ constructor(private val inputText: String) {
                 .toMutableList()
 
         for (currentWord in wordsOnly!!) {
-            for (currentPunctuation in Utils.PUNCTUATION_LIST) {
+            for (currentPunctuation in SentimentUtils.PUNCTUATION_LIST) {
                 val wordPunctuation = currentWord + currentPunctuation
                 var wordPunctCount = Collections.frequency(wordsAndEmoticonsList, wordPunctuation)
                 while (wordPunctCount > 0) {

@@ -1,6 +1,8 @@
-package Utils
+package utils
 
 /**
+ * This enumeration contains the list of tokens that invert the sentiment of the current token
+ *
  * Created by elson on 11/2/18.
  */
 enum class SentimentModifyingTokens(val value: String) {

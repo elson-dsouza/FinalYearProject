@@ -1,19 +1,21 @@
 package kafkaTweetProducer;
 
-import Utils.Constants;
 import com.google.gson.Gson;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
+import utils.Constants;
 
 import java.util.Properties;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
+ * This class the kafka producer which streams in the tweets from the twitter intermediate and
+ * stores in in a Kafka broker intermediate before being streamed into the storm topology
+ *
  * Created by elson on 4/3/18.
  */
-
 public class TweetProducer {
 
     public static void main(String args[]) {

@@ -1,6 +1,5 @@
 package stormTweetAnalyzer.Bolt;
 
-import Utils.Constants;
 import com.google.gson.Gson;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
@@ -10,6 +9,7 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 import twitter4j.Status;
+import utils.Constants;
 
 import java.util.Map;
 
@@ -33,7 +33,7 @@ public class ParseTweetBolt extends BaseRichBolt {
     @Override
     public void execute(final Tuple input)
     {
-        final String tweetJson = (String) input.getValueByField(Constants.EMITTED_TUPLES.TWEET_JSON);
+        final String tweetJson = (String) input.getValueByField(Constants.EMITTED_TUPLE_NAMES.TWEET_JSON);
         Status status = gson.fromJson(tweetJson, Status.class);
         collector.emit(new Values(status));
     }
@@ -42,6 +42,6 @@ public class ParseTweetBolt extends BaseRichBolt {
     public void declareOutputFields(OutputFieldsDeclarer declarer)
     {
         // tell storm the schema of the output tuple for this spout
-        declarer.declare(new Fields(Constants.EMITTED_TUPLES.RAW_TWEET));
+        declarer.declare(new Fields(Constants.EMITTED_TUPLE_NAMES.RAW_TWEET));
     }
 }

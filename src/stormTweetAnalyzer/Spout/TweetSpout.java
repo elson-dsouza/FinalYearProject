@@ -1,6 +1,5 @@
 package stormTweetAnalyzer.Spout;
 
-import Utils.Constants;
 import org.apache.storm.Config;
 import org.apache.storm.spout.SpoutOutputCollector;
 import org.apache.storm.task.TopologyContext;
@@ -11,6 +10,7 @@ import org.apache.storm.tuple.Values;
 import org.apache.storm.utils.Utils;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
+import utils.Constants;
 
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -100,7 +100,7 @@ public class TweetSpout extends BaseRichSpout {
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
         // tell storm the schema of the output tuple for this spout
         // tuple consists of a single column called 'tweet'
-        outputFieldsDeclarer.declare(new Fields(Constants.EMITTED_TUPLES.RAW_TWEET));
+        outputFieldsDeclarer.declare(new Fields(Constants.EMITTED_TUPLE_NAMES.RAW_TWEET));
     }
 
     // Class for listening on the tweet stream - for twitter4j
