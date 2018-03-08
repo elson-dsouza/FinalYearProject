@@ -1,6 +1,5 @@
 package stormTweetAnalyzer.Bolt;
 
-import com.google.gson.Gson;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
@@ -22,14 +21,12 @@ public class ParseTweetBolt extends BaseRichBolt {
 
     // To output tuples from this bolt to the count bolt
     private OutputCollector collector;
-    private Gson gson;
 
     @Override
     public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector)
     {
         // save the output collector for emitting tuples
         collector = outputCollector;
-        gson = new Gson();
     }
 
     @Override

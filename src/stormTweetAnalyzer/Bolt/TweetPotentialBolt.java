@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Created by elson on 5/2/18.
  */
-public final class TweetPotentialBolt extends BaseRichBolt {
+public class TweetPotentialBolt extends BaseRichBolt {
     // To output tuples from this bolt to the count bolt
     private OutputCollector collector;
 
