@@ -21,7 +21,7 @@ class SentimentAnalyzer {
     /**
      * This section performs the following evaluation:
      *
-     * If the term at currentItemPosition is followed by "kind of" or the it is present in
+     * If the term at currentItemPosition is followed by some token present in
      * [SentimentUtils.BoosterDictionary], add the currentValence to sentiment array
      * and break to the next loop.
      *

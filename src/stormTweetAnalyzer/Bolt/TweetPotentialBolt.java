@@ -38,13 +38,13 @@ public class TweetPotentialBolt extends BaseRichBolt {
     @Override
     public final void execute(final Tuple input) {
         final Status status = (Status) input.getValueByField(Constants.EMITTED_TUPLE_NAMES.RAW_TWEET);
-        final String tweetProcessed = status.getText();
+        final String tweetText = status.getText();
         SentimentAnalyzer sentimentAnalyzer = new SentimentAnalyzer();
 
-        float sentimentOfCurrentTweet = sentimentAnalyzer.analyze(tweetProcessed);
-        TweetPotential tweetPotential = new TweetPotential(status, tweetProcessed,
-                sentimentOfCurrentTweet);
-        System.out.println("Tweet potential: "+ sentimentOfCurrentTweet);
+        float sentimentOfCurrentTweet = sentimentAnalyzer.analyze(tweetText);
+        TweetPotential tweetPotential = new TweetPotential(status, sentimentOfCurrentTweet);
+        System.out.println("\n\n" +
+                "Tweet: "+tweetText+"\nTweet potential: "+ sentimentOfCurrentTweet);
         collector.emit(new Values(tweetPotential));
     }
 }

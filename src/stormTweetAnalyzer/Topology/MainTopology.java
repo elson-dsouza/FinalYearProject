@@ -15,6 +15,7 @@ import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.utils.Utils;
 import stormTweetAnalyzer.Bolt.ParseTweetBolt;
+import stormTweetAnalyzer.Bolt.TopicPotentialBolt;
 import stormTweetAnalyzer.Bolt.TweetPotentialBolt;
 import utils.Constants;
 
@@ -33,27 +34,23 @@ public class MainTopology {
             }
         });
 
-        // create the topology
+        // Define the topology
         TopologyBuilder builder = new TopologyBuilder();
-        // now create the tweet spout with the credentials and
-        // attach the tweet spout to the topology - parallelism of 1
         builder.setSpout(Constants.BOLT_OR_SPOUT_NAMES.TWEET_KAFKA_SPOUT, new KafkaSpout(kafkaConfig),
                 8);
         builder.setBolt(Constants.BOLT_OR_SPOUT_NAMES.TWEET_PARSER_BOLT, new ParseTweetBolt(),
                 8).shuffleGrouping(Constants.BOLT_OR_SPOUT_NAMES.TWEET_KAFKA_SPOUT);
         builder.setBolt(Constants.BOLT_OR_SPOUT_NAMES.TWEET_POTENTIAL_BOLT, new TweetPotentialBolt(),
                 8).shuffleGrouping(Constants.BOLT_OR_SPOUT_NAMES.TWEET_PARSER_BOLT);
+        builder.setBolt(Constants.BOLT_OR_SPOUT_NAMES.TOPIC_POTENTIAL_BOLT, new TopicPotentialBolt(),
+                1).globalGrouping(Constants.BOLT_OR_SPOUT_NAMES.TWEET_POTENTIAL_BOLT);
 
-        // create the default config object
         Config conf = new Config();
-        // set the config in debugging mode
         conf.setDebug(true);
 
         if (args != null && args.length > 0) {
-
             // run it in a live cluster
             // set the number of workers for running all spout and bolt tasks
-
             conf.setNumWorkers(3);
 
             // create the topology and submit with config
@@ -65,8 +62,7 @@ public class MainTopology {
         }
         else {
             // run it in a simulated local cluster
-
-            // set the number of threads to run - similar to setting number of workers in live cluster
+            // set the number of threads to run
             conf.setMaxTaskParallelism(3);
 
             // create the local cluster instance
@@ -75,13 +71,11 @@ public class MainTopology {
             // submit the topology to the local cluster
             cluster.submitTopology(Constants.TOPOLOGY_NAME, conf, builder.createTopology());
 
-            // let the topology run for 1 hour. note topologies never terminate!
+            // let the topology run for 1 hour
             Utils.sleep(3600000);
 
-            // now kill the topology
+            // Shutdown the topology
             cluster.killTopology(Constants.TOPOLOGY_NAME);
-
-            // we are done, so shutdown the local cluster
             cluster.shutdown();
         }
     }
