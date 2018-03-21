@@ -1,5 +1,7 @@
 package stormTweetAnalyzer.Bolt;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
@@ -7,11 +9,10 @@ import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
-import twitter4j.Status;
-import twitter4j.TwitterException;
-import twitter4j.TwitterObjectFactory;
+import stormTweetAnalyzer.Twitter4JImpl.StatusImpl;
 import utils.Constants;
 
+import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
@@ -21,24 +22,24 @@ public class ParseTweetBolt extends BaseRichBolt {
 
     // To output tuples from this bolt to the count bolt
     private OutputCollector collector;
+    private Gson gson;
+    private Type gsonType;
 
     @Override
     public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector)
     {
         // save the output collector for emitting tuples
         collector = outputCollector;
+        gson = new Gson();
+        gsonType = new TypeToken<StatusImpl>(){}.getType();
     }
 
     @Override
     public void execute(final Tuple input)
     {
         final String tweetJson = (String) input.getValueByField(Constants.EMITTED_TUPLE_NAMES.TWEET_JSON);
-        Status status = null;
-        try {
-            status = TwitterObjectFactory.createStatus(tweetJson);
-        } catch (TwitterException e) {
-            e.printStackTrace();
-        }
+        StatusImpl status = gson.fromJson(tweetJson, gsonType);
+        System.out.println("Original tweet: "+ status);
         collector.emit(new Values(status));
     }
 
