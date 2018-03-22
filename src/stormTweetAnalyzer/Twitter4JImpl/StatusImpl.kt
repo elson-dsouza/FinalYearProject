@@ -20,23 +20,16 @@ class StatusImpl : Status {
     private var favoriteCount: Int = 0
     private var inReplyToScreenName: String? = null
     private var geoLocation: GeoLocation? = null
-    private var place: Place? = null
+    private var place: PlaceImpl? = null
     private var retweetCount: Long = 0
     private var isPossiblySensitive: Boolean = false
     private var lang: String? = null
     private var contributorsIDs: LongArray? = null
     private var retweetedStatus: StatusImpl? = null
-    private var userMentionEntities: Array<UserMentionEntity>? = null
-    private var urlEntities: Array<URLEntity>? = null
-    private var hashtagEntities: Array<HashtagEntity>? = null
-    private var mediaEntities: Array<MediaEntity>? = null
-    private var extendedMediaEntities: Array<ExtendedMediaEntity>? = null
-    private var symbolEntities: Array<SymbolEntity>? = null
     private var currentUserRetweetId = -1L
-    private var scopes: Scopes? = null
-    private var user: User? = null
+    private var user: UserImpl? = null
     private var withheldInCountries: Array<String>? = null
-    private var quotedStatus: Status? = null
+    private var quotedStatus: StatusImpl? = null
     private var quotedStatusId = -1L
 
     override fun compareTo(other: Status): Int {
@@ -127,32 +120,8 @@ class StatusImpl : Status {
         return this.isPossiblySensitive
     }
 
-    override fun getUserMentionEntities(): Array<UserMentionEntity>? {
-        return this.userMentionEntities
-    }
-
     override fun getURLEntities(): Array<URLEntity>? {
-        return this.urlEntities
-    }
-
-    override fun getHashtagEntities(): Array<HashtagEntity>? {
-        return this.hashtagEntities
-    }
-
-    override fun getMediaEntities(): Array<MediaEntity>? {
-        return this.mediaEntities
-    }
-
-    override fun getExtendedMediaEntities(): Array<ExtendedMediaEntity>? {
-        return this.extendedMediaEntities
-    }
-
-    override fun getSymbolEntities(): Array<SymbolEntity>? {
-        return this.symbolEntities
-    }
-
-    override fun getScopes(): Scopes? {
-        return this.scopes
+        return null
     }
 
     override fun getWithheldInCountries(): Array<String>? {
@@ -168,15 +137,15 @@ class StatusImpl : Status {
     }
 
     override fun getAccessLevel(): Int {
-        TODO("not implemented")
+        return -1
     }
 
     override fun getLang(): String? {
         return this.lang
     }
 
-    override fun getRateLimitStatus(): RateLimitStatus {
-        TODO("not implemented")
+    override fun getRateLimitStatus(): RateLimitStatus? {
+        return null
     }
 
     override fun hashCode(): Int {
@@ -190,6 +159,50 @@ class StatusImpl : Status {
     }
 
     override fun toString(): String {
-        return "StatusJSONImpl{createdAt=" + this.createdAt + ", id=" + this.id + ", text='" + this.text + '\''.toString() + ", source='" + this.source + '\''.toString() + ", isTruncated=" + this.isTruncated + ", inReplyToStatusId=" + this.inReplyToStatusId + ", inReplyToUserId=" + this.inReplyToUserId + ", isFavorited=" + this.isFavorited + ", isRetweeted=" + this.isRetweeted + ", favoriteCount=" + this.favoriteCount + ", inReplyToScreenName='" + this.inReplyToScreenName + '\''.toString() + ", geoLocation=" + this.geoLocation + ", place=" + this.place + ", retweetCount=" + this.retweetCount + ", isPossiblySensitive=" + this.isPossiblySensitive + ", lang='" + this.lang + '\''.toString() + ", contributorsIDs=" + Arrays.toString(this.contributorsIDs) + ", retweetedStatus=" + this.retweetedStatus + ", userMentionEntities=" + Arrays.toString(this.userMentionEntities) + ", urlEntities=" + Arrays.toString(this.urlEntities) + ", hashtagEntities=" + Arrays.toString(this.hashtagEntities) + ", mediaEntities=" + Arrays.toString(this.mediaEntities) + ", symbolEntities=" + Arrays.toString(this.symbolEntities) + ", currentUserRetweetId=" + this.currentUserRetweetId + ", user=" + this.user + ", withHeldInCountries=" + Arrays.toString(this.withheldInCountries) + ", quotedStatusId=" + this.quotedStatusId + ", quotedStatus=" + this.quotedStatus + '}'.toString()
+        return "StatusImpl{createdAt=" + this.createdAt +
+                ", id=" + this.id + ", text='" + this.text + '\''.toString() +
+                ", source='" + this.source + '\''.toString() + ", isTruncated=" +
+                this.isTruncated + ", inReplyToStatusId=" + this.inReplyToStatusId +
+                ", inReplyToUserId=" + this.inReplyToUserId + ", isFavorited=" +
+                this.isFavorited + ", isRetweeted=" + this.isRetweeted + ", favoriteCount=" +
+                this.favoriteCount + ", inReplyToScreenName='" + this.inReplyToScreenName +
+                '\''.toString() + ", geoLocation=" + this.geoLocation + ", place=" +
+                this.place + ", retweetCount=" + this.retweetCount +
+                ", isPossiblySensitive=" + this.isPossiblySensitive + ", lang='" +
+                this.lang + '\''.toString() + ", contributorsIDs=" +
+                Arrays.toString(this.contributorsIDs) + ", retweetedStatus=" +
+                this.retweetedStatus + ", userMentionEntities=" +
+                Arrays.toString(this.userMentionEntities) + ", urlEntities=" +
+                Arrays.toString(this.urlEntities) + ", hashtagEntities=" +
+                Arrays.toString(this.hashtagEntities) + ", mediaEntities=" +
+                Arrays.toString(this.mediaEntities) + ", symbolEntities=" +
+                Arrays.toString(this.symbolEntities) + ", currentUserRetweetId=" +
+                this.currentUserRetweetId + ", user=" + this.user + ", withHeldInCountries=" +
+                Arrays.toString(this.withheldInCountries) + ", quotedStatusId=" +
+                this.quotedStatusId + ", quotedStatus=" + this.quotedStatus + '}'.toString()
+    }
+
+    override fun getUserMentionEntities(): Array<UserMentionEntity>? {
+        return null
+    }
+
+    override fun getSymbolEntities(): Array<SymbolEntity>? {
+        return null
+    }
+
+    override fun getMediaEntities(): Array<MediaEntity>? {
+        return null
+    }
+
+    override fun getScopes(): Scopes? {
+        return null
+    }
+
+    override fun getExtendedMediaEntities(): Array<ExtendedMediaEntity>? {
+        return null
+    }
+
+    override fun getHashtagEntities(): Array<HashtagEntity>? {
+        return null
     }
 }

@@ -10,8 +10,6 @@ import org.apache.storm.tuple.Values
 import stormTweetAnalyzer.Model.TopicPotential
 import stormTweetAnalyzer.Model.TweetPotential
 import utils.Constants
-import java.math.BigDecimal
-import java.math.MathContext
 import java.util.*
 
 /**
@@ -22,7 +20,7 @@ class TopicPotentialBolt : BaseRichBolt(){
 
     // To output tuples from this bolt to the count bolt
     private lateinit var collector: OutputCollector
-    private var topicPotentialScore: BigDecimal = BigDecimal.ZERO
+    private var topicPotentialScore: Double = 0.0
 
     override fun prepare(map: MutableMap<Any?, Any?>, topologyContext: TopologyContext,
                          outputCollector: OutputCollector) {
@@ -32,10 +30,13 @@ class TopicPotentialBolt : BaseRichBolt(){
     override fun execute(input: Tuple) {
         val tweetPotential = input.getValueByField(Constants.EMITTED_TUPLE_NAMES.TWEET_POTENTIAL)
                 as TweetPotential
-        val retweetCount = tweetPotential.status.retweetCount
-        val sentiment = tweetPotential.sentiment
+        var influenceFactor = tweetPotential.status.retweetCount
+        influenceFactor += tweetPotential.status.favoriteCount
+        if (tweetPotential.status.quotedStatus != null)
+            influenceFactor += tweetPotential.status.quotedStatus.retweetCount
+        val sentiment = tweetPotential.sentiment.toDouble()
         val time = Date().time
-        topicPotentialScore += MathContext(((retweetCount + 1) * sentiment).toInt())
+        topicPotentialScore += ((influenceFactor + 1).toDouble() * sentiment)
 
         val topicPotential = TopicPotential(time, topicPotentialScore)
         System.out.println("Topic potential at $time : $topicPotentialScore")
