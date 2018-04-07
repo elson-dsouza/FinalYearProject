@@ -17,7 +17,6 @@ import java.util.*
  */
 class TopicPotentialBolt : BaseRichBolt(){
 
-
     // To output tuples from this bolt to the count bolt
     private lateinit var collector: OutputCollector
     private var topicPotentialScore: Double = 0.0

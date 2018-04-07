@@ -14,6 +14,7 @@ import org.apache.storm.spout.SchemeAsMultiScheme;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.utils.Utils;
+import stormTweetAnalyzer.Bolt.BFunctionBolt;
 import stormTweetAnalyzer.Bolt.ParseTweetBolt;
 import stormTweetAnalyzer.Bolt.TopicPotentialBolt;
 import stormTweetAnalyzer.Bolt.TweetPotentialBolt;
@@ -44,6 +45,8 @@ public class MainTopology {
                 8).shuffleGrouping(Constants.BOLT_OR_SPOUT_NAMES.TWEET_PARSER_BOLT);
         builder.setBolt(Constants.BOLT_OR_SPOUT_NAMES.TOPIC_POTENTIAL_BOLT, new TopicPotentialBolt(),
                 1).globalGrouping(Constants.BOLT_OR_SPOUT_NAMES.TWEET_POTENTIAL_BOLT);
+        builder.setBolt(Constants.BOLT_OR_SPOUT_NAMES.B_FUNCTION_BOLT, new BFunctionBolt(),
+                1).globalGrouping(Constants.BOLT_OR_SPOUT_NAMES.TOPIC_POTENTIAL_BOLT);
 
         Config conf = new Config();
         conf.setDebug(true);

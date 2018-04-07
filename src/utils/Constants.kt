@@ -1,5 +1,9 @@
 package utils
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
+
 /**
  * This object holds all the constants used in this project
  *
@@ -33,6 +37,7 @@ object Constants {
         const val RAW_TWEET = "raw-tweet"
         const val TWEET_POTENTIAL = "tweet-potential"
         const val TOPIC_POTENTIAL = "topic-potential"
+        const val B_FUNCTION = "b-function"
     }
 
     object BOLT_OR_SPOUT_NAMES {
@@ -40,6 +45,7 @@ object Constants {
         const val TWEET_PARSER_BOLT = "tweet-parser-bolt"
         const val TWEET_POTENTIAL_BOLT = "tweet-potential-bolt"
         const val TOPIC_POTENTIAL_BOLT = "topic-potential-bolt"
+        const val B_FUNCTION_BOLT = "b-function-bolt"
     }
 
     // In order to create the spout, we need to get twitter credentials
@@ -54,4 +60,7 @@ object Constants {
     @JvmField val LANGUAGES = arrayOf("en")
     @JvmField val TOPIC = arrayOf("modi", "bjp")
     const val ZOOKEEPER_HOST = "localhost:2181"
+
+    val formatter: DateFormat = SimpleDateFormat("dd/MM/yyyy")
+    val T = formatter.parse("12/05/2018").time.toDouble()
 }
