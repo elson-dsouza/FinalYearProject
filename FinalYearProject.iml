@@ -10,7 +10,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="org.twitter4j:twitter4j-stream:4.0.4" level="project" />
-    <orderEntry type="library" name="com.google.guava:guava:15.0" level="project" />
     <orderEntry type="library" name="com.lambdaworks:lettuce:2.3.3" level="project" />
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
     <orderEntry type="library" name="org.apache.lucene:lucene-analyzers-common:7.2.0" level="project" />
@@ -21,5 +20,9 @@
     <orderEntry type="library" name="org.apache.curator:curator-client:2.11.0" level="project" />
     <orderEntry type="library" name="org.apache.curator:curator-framework:2.11.0" level="project" />
     <orderEntry type="library" name="org.apache.storm:storm-core:1.1.1" level="project" />
+    <orderEntry type="library" name="org.apache.storm:storm-cassandra:1.1.1" level="project" />
+    <orderEntry type="library" name="com.datastax.cassandra:cassandra-driver-core:3.4.0" level="project" />
+    <orderEntry type="library" name="com.google.guava:guava:23.0" level="project" />
+    <orderEntry type="library" name="org.apache.commons:commons-lang3:3.6" level="project" />
   </component>
 </module>

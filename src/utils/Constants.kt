@@ -46,6 +46,7 @@ object Constants {
         const val TWEET_POTENTIAL_BOLT = "tweet-potential-bolt"
         const val TOPIC_POTENTIAL_BOLT = "topic-potential-bolt"
         const val B_FUNCTION_BOLT = "b-function-bolt"
+        const val REPORTER_BOLT = "reporter-bolt"
     }
 
     // In order to create the spout, we need to get twitter credentials
@@ -63,4 +64,13 @@ object Constants {
 
     val formatter: DateFormat = SimpleDateFormat("dd/MM/yyyy")
     val T = formatter.parse("12/05/2018").time.toDouble()
+
+    @JvmField val CASSANDRA_HOST = "cassandra.host"
+    @JvmField val CASSANDRA_PORT = "cassandra.port"
+    @JvmField val CASSANDRA_USERNAME = "cassandra.username"
+    @JvmField val CASSANDRA_PASSWORD = "cassandra.password"
+    @JvmField val CASSANDRA_KEYSPACE = "cassandra.keyspace"
+    @JvmField val CASSANDRA_STATE_KEYSPACE = "cassandra.state.keyspace"
+    @JvmField val CASSANDRA_BATCH_MAX_SIZE = "cassandra.batch.max_size"
+    @JvmField val CASSANDRA_CLIENT_CLASS = "cassandra.client.class"
 }

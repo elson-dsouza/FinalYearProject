@@ -3,6 +3,7 @@ package stormTweetAnalyzer.Topology;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
+import org.apache.storm.cassandra.bolt.CassandraWriterBolt;
 import org.apache.storm.generated.AlreadyAliveException;
 import org.apache.storm.generated.AuthorizationException;
 import org.apache.storm.generated.InvalidTopologyException;
@@ -19,6 +20,8 @@ import stormTweetAnalyzer.Bolt.ParseTweetBolt;
 import stormTweetAnalyzer.Bolt.TopicPotentialBolt;
 import stormTweetAnalyzer.Bolt.TweetPotentialBolt;
 import utils.Constants;
+
+import static org.apache.storm.cassandra.DynamicStatementBuilder.*;
 
 public class MainTopology {
 
@@ -47,8 +50,15 @@ public class MainTopology {
                 1).globalGrouping(Constants.BOLT_OR_SPOUT_NAMES.TWEET_POTENTIAL_BOLT);
         builder.setBolt(Constants.BOLT_OR_SPOUT_NAMES.B_FUNCTION_BOLT, new BFunctionBolt(),
                 1).globalGrouping(Constants.BOLT_OR_SPOUT_NAMES.TOPIC_POTENTIAL_BOLT);
+        builder.setBolt(Constants.BOLT_OR_SPOUT_NAMES.REPORTER_BOLT, new CassandraWriterBolt(
+                        async(simpleQuery("INSERT INTO TopicSeries(time, topicName, topicPotential, A, B) " +
+                                "VALUES (?, ?, ?, ?, ?);").with(all()))), 1)
+                .globalGrouping(Constants.BOLT_OR_SPOUT_NAMES.B_FUNCTION_BOLT);
+
 
         Config conf = new Config();
+        conf.put(Constants.CASSANDRA_HOST, "localhost:9042");
+        conf.put(Constants.CASSANDRA_KEYSPACE,"tutorialspoint");
         conf.setDebug(true);
 
         if (args != null && args.length > 0) {
