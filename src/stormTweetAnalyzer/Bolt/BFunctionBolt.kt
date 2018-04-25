@@ -18,7 +18,7 @@ import kotlin.math.pow
 /**
  * Created by elson on 5/4/18.
  */
-class BFunctionBolt : BaseRichBolt(){
+class BFunctionBolt : BaseRichBolt() {
 
     // To output tuples from this bolt to the count bolt
     private lateinit var collector: OutputCollector
@@ -40,9 +40,9 @@ class BFunctionBolt : BaseRichBolt(){
         minPotential = min(minPotential, topicPotential.topicPotential)
 
         val A = maxPotential
-        val B = (minPotential - A)/ Constants.T.pow(m)
+        val B = (minPotential - A) / Constants.T.pow(m)
 
-        collector.emit(Values(Date(topicPotential.time),Constants.KAFKA_TOPIC, topicPotential.topicPotential, A, B))
+        collector.emit(Values(Date(topicPotential.time), Constants.KAFKA_TOPIC, topicPotential.topicPotential, A, B))
     }
 
     override fun declareOutputFields(declarer: OutputFieldsDeclarer) {

@@ -51,14 +51,14 @@ public class MainTopology {
         builder.setBolt(Constants.BOLT_OR_SPOUT_NAMES.B_FUNCTION_BOLT, new BFunctionBolt(),
                 1).globalGrouping(Constants.BOLT_OR_SPOUT_NAMES.TOPIC_POTENTIAL_BOLT);
         builder.setBolt(Constants.BOLT_OR_SPOUT_NAMES.REPORTER_BOLT, new CassandraWriterBolt(
-                        async(simpleQuery("INSERT INTO TopicSeries(time, topicName, topicPotential, A, B) " +
-                                "VALUES (?, ?, ?, ?, ?);").with(all()))), 1)
+                async(simpleQuery("INSERT INTO TopicSeries(time, topicName, topicPotential, A, B) " +
+                        "VALUES (?, ?, ?, ?, ?);").with(all()))), 1)
                 .globalGrouping(Constants.BOLT_OR_SPOUT_NAMES.B_FUNCTION_BOLT);
 
 
         Config conf = new Config();
         conf.put(Constants.CASSANDRA_HOST, "localhost:9042");
-        conf.put(Constants.CASSANDRA_KEYSPACE,"tutorialspoint");
+        conf.put(Constants.CASSANDRA_KEYSPACE, "tutorialspoint");
         conf.setDebug(true);
 
         if (args != null && args.length > 0) {
@@ -72,8 +72,7 @@ public class MainTopology {
             } catch (AlreadyAliveException | InvalidTopologyException | AuthorizationException e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             // run it in a simulated local cluster
             // set the number of threads to run
             conf.setMaxTaskParallelism(3);

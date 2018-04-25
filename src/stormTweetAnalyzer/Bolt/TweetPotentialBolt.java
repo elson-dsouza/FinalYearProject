@@ -44,7 +44,7 @@ public class TweetPotentialBolt extends BaseRichBolt {
         float sentimentOfCurrentTweet = sentimentAnalyzer.analyze(tweetText);
         TweetPotential tweetPotential = new TweetPotential(status, sentimentOfCurrentTweet);
         System.out.println("\n\n" +
-                "Tweet: "+tweetText+"\nTweet potential: "+ sentimentOfCurrentTweet);
+                "Tweet: " + tweetText + "\nTweet potential: " + sentimentOfCurrentTweet);
         collector.emit(new Values(tweetPotential));
     }
 }

@@ -1,13 +1,18 @@
 package kafkaTweetProducer
 
+import com.fasterxml.jackson.dataformat.csv.CsvMapper
+import com.fasterxml.jackson.dataformat.csv.CsvParser
 import com.google.gson.Gson
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerRecord
-import twitter4j.*
-import twitter4j.conf.ConfigurationBuilder
+import stormTweetAnalyzer.Twitter4JImpl.StatusImpl
+import stormTweetAnalyzer.Twitter4JImpl.UserImpl
+import twitter4j.Status
 import utils.Constants
+import java.io.File
 import java.util.*
 import java.util.concurrent.LinkedBlockingQueue
+
 
 /**
  * Created by elson on 25/4/18.
@@ -19,48 +24,6 @@ object CSVtoKafka {
     fun main(args: Array<String>) {
         val queue = LinkedBlockingQueue<Status>(1000)
 
-        val cb = ConfigurationBuilder()
-        cb.setDebugEnabled(true)
-                .setOAuthConsumerKey(Constants.OAUTH_CONSUMER_KEY)
-                .setOAuthConsumerSecret(Constants.OAUTH_CONSUMER_SECRET)
-                .setOAuthAccessToken(Constants.OAUTH_ACCESS_TOKEN)
-                .setOAuthAccessTokenSecret(Constants.OAUTH_ACCESS_TOKEN_SECRET)
-
-        val twitterStream = TwitterStreamFactory(cb.build()).instance
-
-        val tweetListener = object : StatusListener {
-            override fun onException(e: Exception) {
-                e.printStackTrace()
-            }
-
-            override fun onStatus(status: Status) {
-                queue.offer(status)
-            }
-
-            override fun onDeletionNotice(statusDeletionNotice: StatusDeletionNotice) {
-
-            }
-
-            override fun onTrackLimitationNotice(i: Int) {
-
-            }
-
-            override fun onScrubGeo(l: Long, l1: Long) {
-
-            }
-
-            override fun onStallWarning(stallWarning: StallWarning) {
-
-            }
-        }
-
-        twitterStream.addListener(tweetListener)
-
-        val tweetFilterQuery = FilterQuery()
-        tweetFilterQuery.track(*Constants.TOPIC)
-        tweetFilterQuery.language(*Constants.LANGUAGES)
-        twitterStream.filter(tweetFilterQuery)
-
         //Add Kafka producer config settings
         val props = Properties()
         props["metadata.broker.list"] = "localhost:9092"
@@ -69,29 +32,24 @@ object CSVtoKafka {
         props["value.serializer"] = "org.apache.kafka.common.serialization.StringSerializer"
 
         val producer = KafkaProducer<String, String>(props)
-
-        //Handle shutdown
-        Runtime.getRuntime().addShutdownHook(Thread {
-            producer.close()
-            twitterStream.shutdown()
-        })
-
         val gson = Gson()
 
-        while (true) {
-            val tweet = queue.poll()
-            if (tweet == null) {
-                try {
-                    Thread.sleep(100)
-                } catch (e: InterruptedException) {
-                    producer.close()
-                    twitterStream.shutdown()
-                    e.printStackTrace()
-                }
-
-            } else {
-                producer.send(ProducerRecord(Constants.KAFKA_TOPIC, gson.toJson(tweet)))
-            }
+        val mapper = CsvMapper()
+        mapper.enable(CsvParser.Feature.WRAP_AS_ARRAY)
+        val csvFile = File("input.csv")
+        val it = mapper.readerFor(Array<String>::class.java)
+                .readValues<Array<String>>(csvFile)
+        it.next()
+        while (it.hasNext()) {
+            val row = it.next()
+            val user = UserImpl(row[1])
+            //TODO: Fix this
+            val date = Date(row[4])
+            val status = StatusImpl(date, row[0],Integer.parseInt(row[3]),
+                    Integer.parseInt(row[2]),user)
+            producer.send(ProducerRecord(Constants.KAFKA_TOPIC, gson.toJson(status)))
         }
+
+        producer.close()
     }
 }

@@ -58,19 +58,29 @@ object Constants {
     const val OAUTH_CONSUMER_SECRET = "R3ZX67z2nnPkiPv7TQ45Ajxx6foN2LmnuMhfCfBR8v0IY3fclY"
     const val KAFKA_TOPIC = "kafka.twitter.raw.topic"
 
-    @JvmField val LANGUAGES = arrayOf("en")
-    @JvmField val TOPIC = arrayOf("modi", "bjp")
+    @JvmField
+    val LANGUAGES = arrayOf("en")
+    @JvmField
+    val TOPIC = arrayOf("modi", "bjp")
     const val ZOOKEEPER_HOST = "localhost:2181"
 
     val formatter: DateFormat = SimpleDateFormat("dd/MM/yyyy")
     val T = formatter.parse("12/05/2018").time.toDouble()
 
-    @JvmField val CASSANDRA_HOST = "cassandra.host"
-    @JvmField val CASSANDRA_PORT = "cassandra.port"
-    @JvmField val CASSANDRA_USERNAME = "cassandra.username"
-    @JvmField val CASSANDRA_PASSWORD = "cassandra.password"
-    @JvmField val CASSANDRA_KEYSPACE = "cassandra.keyspace"
-    @JvmField val CASSANDRA_STATE_KEYSPACE = "cassandra.state.keyspace"
-    @JvmField val CASSANDRA_BATCH_MAX_SIZE = "cassandra.batch.max_size"
-    @JvmField val CASSANDRA_CLIENT_CLASS = "cassandra.client.class"
+    @JvmField
+    val CASSANDRA_HOST = "cassandra.host"
+    @JvmField
+    val CASSANDRA_PORT = "cassandra.port"
+    @JvmField
+    val CASSANDRA_USERNAME = "cassandra.username"
+    @JvmField
+    val CASSANDRA_PASSWORD = "cassandra.password"
+    @JvmField
+    val CASSANDRA_KEYSPACE = "cassandra.keyspace"
+    @JvmField
+    val CASSANDRA_STATE_KEYSPACE = "cassandra.state.keyspace"
+    @JvmField
+    val CASSANDRA_BATCH_MAX_SIZE = "cassandra.batch.max_size"
+    @JvmField
+    val CASSANDRA_CLIENT_CLASS = "cassandra.client.class"
 }

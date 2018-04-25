@@ -13,7 +13,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 /**
  * This class the kafka producer which streams in the tweets from the twitter intermediate and
  * stores in in a Kafka broker intermediate before being streamed into the storm topology
- *
+ * <p>
  * Created by elson on 4/3/18.
  */
 public class TweetProducer {

@@ -26,26 +26,24 @@ public class ParseTweetBolt extends BaseRichBolt {
     private Type gsonType;
 
     @Override
-    public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector)
-    {
+    public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector) {
         // save the output collector for emitting tuples
         collector = outputCollector;
         gson = new Gson();
-        gsonType = new TypeToken<StatusImpl>(){}.getType();
+        gsonType = new TypeToken<StatusImpl>() {
+        }.getType();
     }
 
     @Override
-    public void execute(final Tuple input)
-    {
+    public void execute(final Tuple input) {
         final String tweetJson = (String) input.getValueByField(Constants.EMITTED_TUPLE_NAMES.TWEET_JSON);
         StatusImpl status = gson.fromJson(tweetJson, gsonType);
-        System.out.println("Original tweet: "+ status);
+        System.out.println("Original tweet: " + status);
         collector.emit(new Values(status));
     }
 
     @Override
-    public void declareOutputFields(OutputFieldsDeclarer declarer)
-    {
+    public void declareOutputFields(OutputFieldsDeclarer declarer) {
         // tell storm the schema of the output tuple for this spout
         declarer.declare(new Fields(Constants.EMITTED_TUPLE_NAMES.RAW_TWEET));
     }

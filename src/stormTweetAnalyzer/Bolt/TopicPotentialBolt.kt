@@ -15,7 +15,7 @@ import java.util.*
 /**
  * Created by elson on 8/3/18.
  */
-class TopicPotentialBolt : BaseRichBolt(){
+class TopicPotentialBolt : BaseRichBolt() {
 
     // To output tuples from this bolt to the count bolt
     private lateinit var collector: OutputCollector

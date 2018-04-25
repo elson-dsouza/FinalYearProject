@@ -128,7 +128,7 @@ object SentimentUtils {
      */
     fun isUpper(token: String): Boolean {
         Constants.URL_PREFIXES.forEach {
-            if(token.toLowerCase().startsWith(it)) return false
+            if (token.toLowerCase().startsWith(it)) return false
         }
         if (!token.matches(Constants.NON_NUMERIC_STRING_REGEX.toRegex())) {
             return false
