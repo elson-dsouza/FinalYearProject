@@ -8,51 +8,14 @@ import java.util.*
 
 class UserImpl : User {
 
-    private var id: Long = 0
     private var name: String? = null
-    private var screenName: String? = null
-    private var location: String? = null
-    private var description: String? = null
-    private var isContributorsEnabled: Boolean = false
-    private var profileImageUrl: String? = null
-    private var profileImageUrlHttps: String? = null
-    private var isDefaultProfileImage: Boolean = false
-    private var url: String? = null
-    private var isProtected: Boolean = false
-    private var followersCount: Int = 0
-    private var status: StatusImpl? = null
-    private var profileBackgroundColor: String? = null
-    private var profileTextColor: String? = null
-    private var profileLinkColor: String? = null
-    private var profileSidebarFillColor: String? = null
-    private var profileSidebarBorderColor: String? = null
-    private var profileUseBackgroundImage: Boolean = false
-    private var isDefaultProfile: Boolean = false
-    private var showAllInlineMedia: Boolean = false
-    private var friendsCount: Int = 0
-    private var createdAt: Date? = null
-    private var favouritesCount: Int = 0
-    private var utcOffset: Int = 0
-    private var timeZone: String? = null
-    private var profileBackgroundImageUrl: String? = null
-    private var profileBackgroundImageUrlHttps: String? = null
-    private var profileBannerImageUrl: String? = null
-    private var profileBackgroundTiled: Boolean = false
-    private var lang: String? = null
-    private var statusesCount: Int = 0
-    private var isGeoEnabled: Boolean = false
-    private var isVerified: Boolean = false
-    private var translator: Boolean = false
-    private var listedCount: Int = 0
-    private var isFollowRequestSent: Boolean = false
-    private var withheldInCountries: Array<String>? = null
 
     override fun compareTo(other: User): Int {
         return (this.id - other.id).toInt()
     }
 
     override fun getId(): Long {
-        return this.id
+        return -1
     }
 
     override fun getName(): String? {
@@ -60,266 +23,195 @@ class UserImpl : User {
     }
 
     override fun getScreenName(): String? {
-        return this.screenName
+        return null
     }
 
     override fun getLocation(): String? {
-        return this.location
+        return null
     }
 
     override fun getDescription(): String? {
-        return this.description
+        return null
     }
 
     override fun isContributorsEnabled(): Boolean {
-        return this.isContributorsEnabled
+        return false
     }
 
     override fun getProfileImageURL(): String? {
-        return this.profileImageUrl
+        return null
     }
 
     override fun getBiggerProfileImageURL(): String? {
-        return this.toResizedURL(this.profileImageUrl, "_bigger")
+        return null
     }
 
     override fun getMiniProfileImageURL(): String? {
-        return this.toResizedURL(this.profileImageUrl, "_mini")
+        return null
     }
 
     override fun getOriginalProfileImageURL(): String? {
-        return this.toResizedURL(this.profileImageUrl, "")
-    }
-
-    private fun toResizedURL(originalURL: String?, sizeSuffix: String): String? {
-        if (null != originalURL) {
-            val index = originalURL.lastIndexOf("_")
-            val suffixIndex = originalURL.lastIndexOf(".")
-            val slashIndex = originalURL.lastIndexOf("/")
-            var url = originalURL.substring(0, index) + sizeSuffix
-            if (suffixIndex > slashIndex) {
-                url = url + originalURL.substring(suffixIndex)
-            }
-
-            return url
-        } else {
-            return null
-        }
+        return null
     }
 
     override fun getProfileImageURLHttps(): String? {
-        return this.profileImageUrlHttps
+        return null
     }
 
     override fun getBiggerProfileImageURLHttps(): String? {
-        return this.toResizedURL(this.profileImageUrlHttps, "_bigger")
+        return null
     }
 
     override fun getMiniProfileImageURLHttps(): String? {
-        return this.toResizedURL(this.profileImageUrlHttps, "_mini")
+        return null
     }
 
     override fun getOriginalProfileImageURLHttps(): String? {
-        return this.toResizedURL(this.profileImageUrlHttps, "")
+        return null
     }
 
     override fun isDefaultProfileImage(): Boolean {
-        return this.isDefaultProfileImage
+        return false
     }
 
     override fun getURL(): String? {
-        return this.url
+        return null
     }
 
     override fun isProtected(): Boolean {
-        return this.isProtected
+        return false
     }
 
     override fun getFollowersCount(): Int {
-        return this.followersCount
+        return -1
     }
 
     override fun getProfileBackgroundColor(): String? {
-        return this.profileBackgroundColor
+        return null
     }
 
     override fun getProfileTextColor(): String? {
-        return this.profileTextColor
+        return null
     }
 
     override fun getProfileLinkColor(): String? {
-        return this.profileLinkColor
+        return null
     }
 
     override fun getProfileSidebarFillColor(): String? {
-        return this.profileSidebarFillColor
+        return null
     }
 
     override fun getProfileSidebarBorderColor(): String? {
-        return this.profileSidebarBorderColor
+        return null
     }
 
     override fun isProfileUseBackgroundImage(): Boolean {
-        return this.profileUseBackgroundImage
+        return false
     }
 
     override fun isDefaultProfile(): Boolean {
-        return this.isDefaultProfile
+        return false
     }
 
     override fun isShowAllInlineMedia(): Boolean {
-        return this.showAllInlineMedia
+        return false
     }
 
     override fun getFriendsCount(): Int {
-        return this.friendsCount
+        return -1
     }
 
     override fun getStatus(): Status? {
-        return this.status
+        return null
     }
 
     override fun getCreatedAt(): Date? {
-        return this.createdAt
+        return null
     }
 
     override fun getFavouritesCount(): Int {
-        return this.favouritesCount
+        return -1
     }
 
     override fun getUtcOffset(): Int {
-        return this.utcOffset
+        return 0
     }
 
     override fun getTimeZone(): String? {
-        return this.timeZone
+        return null
     }
 
     override fun getProfileBackgroundImageURL(): String? {
-        return this.profileBackgroundImageUrl
+        return null
     }
 
     override fun getProfileBackgroundImageUrlHttps(): String? {
-        return this.profileBackgroundImageUrlHttps
+        return null
     }
 
     override fun getProfileBannerURL(): String? {
-        return if (this.profileBannerImageUrl != null) this.profileBannerImageUrl!! + "/web"
-        else null
+        return null
     }
 
     override fun getProfileBannerRetinaURL(): String? {
-        return if (this.profileBannerImageUrl != null)
-            this.profileBannerImageUrl!! + "/web_retina"
-        else null
+        return null
     }
 
     override fun getProfileBannerIPadURL(): String? {
-        return if (this.profileBannerImageUrl != null)
-            this.profileBannerImageUrl!! + "/ipad"
-        else null
+        return null
     }
 
     override fun getProfileBannerIPadRetinaURL(): String? {
-        return if (this.profileBannerImageUrl != null)
-            this.profileBannerImageUrl!! + "/ipad_retina"
-        else null
+        return null
     }
 
     override fun getProfileBannerMobileURL(): String? {
-        return if (this.profileBannerImageUrl != null)
-            this.profileBannerImageUrl!! + "/mobile"
-        else null
+        return null
     }
 
     override fun getProfileBannerMobileRetinaURL(): String? {
-        return if (this.profileBannerImageUrl != null) this.profileBannerImageUrl!! + "/mobile_retina" else null
+        return null
     }
 
     override fun isProfileBackgroundTiled(): Boolean {
-        return this.profileBackgroundTiled
+        return false
     }
 
     override fun getLang(): String? {
-        return this.lang
+        return "en"
     }
 
     override fun getStatusesCount(): Int {
-        return this.statusesCount
+        return -1
     }
 
     override fun isGeoEnabled(): Boolean {
-        return this.isGeoEnabled
+        return false
     }
 
     override fun isVerified(): Boolean {
-        return this.isVerified
+        return false
     }
 
     override fun isTranslator(): Boolean {
-        return this.translator
+        return false
     }
 
     override fun getListedCount(): Int {
-        return this.listedCount
+        return -1
     }
 
     override fun isFollowRequestSent(): Boolean {
-        return this.isFollowRequestSent
+        return false
     }
 
     override fun getDescriptionURLEntities(): Array<URLEntity>? {
-        return this.descriptionURLEntities
+        return null
     }
 
     override fun getWithheldInCountries(): Array<String>? {
-        return this.withheldInCountries
-    }
-
-    override fun hashCode(): Int {
-        return this.id.toInt()
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return if (null == other) false
-        else if (this === other) true
-        else other is User && other.id == this.id
-    }
-
-    override fun toString(): String {
-        return "UserImpl{id=" + this.id + ", name='" + this.name + '\''.toString() +
-                ", screenName='" + this.screenName + '\''.toString() + ", location='" +
-                this.location + '\''.toString() + ", description='" + this.description +
-                '\''.toString() + ", isContributorsEnabled=" + this.isContributorsEnabled +
-                ", profileImageUrl='" + this.profileImageUrl + '\''.toString() +
-                ", profileImageUrlHttps='" + this.profileImageUrlHttps + '\''.toString() +
-                ", isDefaultProfileImage=" + this.isDefaultProfileImage + ", url='" +
-                this.url + '\''.toString() + ", isProtected=" + this.isProtected +
-                ", followersCount=" + this.followersCount + ", status=" + this.status +
-                ", profileBackgroundColor='" + this.profileBackgroundColor +
-                '\''.toString() + ", profileTextColor='" + this.profileTextColor +
-                '\''.toString() + ", profileLinkColor='" + this.profileLinkColor +
-                '\''.toString() + ", profileSidebarFillColor='" +
-                this.profileSidebarFillColor + '\''.toString() +
-                ", profileSidebarBorderColor='" + this.profileSidebarBorderColor +
-                '\''.toString() + ", profileUseBackgroundImage=" +
-                this.profileUseBackgroundImage + ", isDefaultProfile=" +
-                this.isDefaultProfile + ", showAllInlineMedia=" +
-                this.showAllInlineMedia + ", friendsCount=" + this.friendsCount +
-                ", createdAt=" + this.createdAt + ", favouritesCount=" +
-                this.favouritesCount + ", utcOffset=" + this.utcOffset +
-                ", timeZone='" + this.timeZone + '\''.toString() +
-                ", profileBackgroundImageUrl='" +
-                this.profileBackgroundImageUrl + '\''.toString() +
-                ", profileBackgroundImageUrlHttps='" + this.profileBackgroundImageUrlHttps +
-                '\''.toString() + ", profileBackgroundTiled=" +
-                this.profileBackgroundTiled + ", lang='" + this.lang +
-                '\''.toString() + ", statusesCount=" + this.statusesCount +
-                ", isGeoEnabled=" + this.isGeoEnabled + ", isVerified=" +
-                this.isVerified + ", translator=" + this.translator + ", listedCount=" +
-                this.listedCount + ", isFollowRequestSent=" + this.isFollowRequestSent +
-                ", withheldInCountries=" + Arrays.toString(this.withheldInCountries) +
-                '}'.toString()
+        return null
     }
 
     override fun getRateLimitStatus(): RateLimitStatus? {
