@@ -56,7 +56,7 @@ object Constants {
     const val OAUTH_ACCESS_TOKEN_SECRET = "VsZnHrtCQVWr3UZHxB6eWrn4u4H1Ptl7NM0BEIc1M0G5J"
     const val OAUTH_CONSUMER_KEY = "SHo4lHNWxFvRFMs4XRoFFHXqi"
     const val OAUTH_CONSUMER_SECRET = "R3ZX67z2nnPkiPv7TQ45Ajxx6foN2LmnuMhfCfBR8v0IY3fclY"
-    const val KAFKA_TOPIC = "kafka.twitter.raw.topic"
+    const val KAFKA_TOPIC = "bjp_karnataka"
 
     @JvmField
     val LANGUAGES = arrayOf("en")

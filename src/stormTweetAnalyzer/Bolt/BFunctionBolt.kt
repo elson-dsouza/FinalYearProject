@@ -9,7 +9,6 @@ import org.apache.storm.tuple.Tuple
 import org.apache.storm.tuple.Values
 import stormTweetAnalyzer.Model.TopicPotential
 import utils.Constants
-import java.util.*
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
@@ -42,7 +41,7 @@ class BFunctionBolt : BaseRichBolt() {
         val A = maxPotential
         val B = (minPotential - A) / Constants.T.pow(m)
 
-        collector.emit(Values(Date(topicPotential.time), Constants.KAFKA_TOPIC, topicPotential.topicPotential, A, B))
+        collector.emit(Values(topicPotential.time, Constants.KAFKA_TOPIC, topicPotential.topicPotential, A, B))
     }
 
     override fun declareOutputFields(declarer: OutputFieldsDeclarer) {

@@ -10,7 +10,6 @@ import org.apache.storm.tuple.Values
 import stormTweetAnalyzer.Model.TopicPotential
 import stormTweetAnalyzer.Model.TweetPotential
 import utils.Constants
-import java.util.*
 
 /**
  * Created by elson on 8/3/18.
@@ -34,9 +33,8 @@ class TopicPotentialBolt : BaseRichBolt() {
         if (tweetPotential.status.quotedStatus != null)
             influenceFactor += tweetPotential.status.quotedStatus.retweetCount
         val sentiment = tweetPotential.sentiment.toDouble()
-        val time = Date().time
         topicPotentialScore += ((influenceFactor + 1).toDouble() * sentiment)
-
+        val time = tweetPotential.status.createdAt
         val topicPotential = TopicPotential(time, topicPotentialScore)
         System.out.println("Topic potential at $time : $topicPotentialScore")
         collector.emit(Values(topicPotential))

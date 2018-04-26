@@ -58,7 +58,7 @@ public class MainTopology {
 
         Config conf = new Config();
         conf.put(Constants.CASSANDRA_HOST, "localhost:9042");
-        conf.put(Constants.CASSANDRA_KEYSPACE, "tutorialspoint");
+        conf.put(Constants.CASSANDRA_KEYSPACE, "prediction");
         conf.setDebug(true);
 
         if (args != null && args.length > 0) {

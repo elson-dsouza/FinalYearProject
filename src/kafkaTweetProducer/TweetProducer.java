@@ -86,6 +86,7 @@ public class TweetProducer {
 
         Gson gson = new Gson();
 
+        //noinspection InfiniteLoopStatement
         while (true) {
             Status tweet = queue.poll();
             if (tweet == null) {
