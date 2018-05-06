@@ -32,7 +32,8 @@ public class TweetPotentialBolt extends BaseRichBolt {
     public final void declareOutputFields(final OutputFieldsDeclarer outputFieldsDeclarer) {
         // tell storm the schema of the output tuple for this spout
         // tuple consists of a single column called 'tweet-word'
-        outputFieldsDeclarer.declare(new Fields(Constants.EMITTED_TUPLE_NAMES.TWEET_POTENTIAL));
+        outputFieldsDeclarer.declare(new Fields(Constants.EMITTED_TUPLE_NAMES.TWEET_POTENTIAL,
+                Constants.EMITTED_TUPLE_NAMES.TWEET_TIME_STAMP));
     }
 
     @Override
@@ -45,6 +46,6 @@ public class TweetPotentialBolt extends BaseRichBolt {
         TweetPotential tweetPotential = new TweetPotential(status, sentimentOfCurrentTweet);
         System.out.println("\n\n" +
                 "Tweet: " + tweetText + "\nTweet potential: " + sentimentOfCurrentTweet);
-        collector.emit(new Values(tweetPotential));
+        collector.emit(new Values(tweetPotential,status.getCreatedAt().getTime()));
     }
 }

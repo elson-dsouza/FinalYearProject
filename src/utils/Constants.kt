@@ -38,6 +38,7 @@ object Constants {
         const val TWEET_POTENTIAL = "tweet-potential"
         const val TOPIC_POTENTIAL = "topic-potential"
         const val B_FUNCTION = "b-function"
+        const val TWEET_TIME_STAMP = "tweet-time-stamp"
     }
 
     object BOLT_OR_SPOUT_NAMES {
@@ -70,17 +71,5 @@ object Constants {
     @JvmField
     val CASSANDRA_HOST = "cassandra.host"
     @JvmField
-    val CASSANDRA_PORT = "cassandra.port"
-    @JvmField
-    val CASSANDRA_USERNAME = "cassandra.username"
-    @JvmField
-    val CASSANDRA_PASSWORD = "cassandra.password"
-    @JvmField
     val CASSANDRA_KEYSPACE = "cassandra.keyspace"
-    @JvmField
-    val CASSANDRA_STATE_KEYSPACE = "cassandra.state.keyspace"
-    @JvmField
-    val CASSANDRA_BATCH_MAX_SIZE = "cassandra.batch.max_size"
-    @JvmField
-    val CASSANDRA_CLIENT_CLASS = "cassandra.client.class"
 }

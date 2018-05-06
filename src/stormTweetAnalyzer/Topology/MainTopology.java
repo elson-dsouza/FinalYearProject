@@ -13,6 +13,7 @@ import org.apache.storm.kafka.StringScheme;
 import org.apache.storm.kafka.ZkHosts;
 import org.apache.storm.spout.SchemeAsMultiScheme;
 import org.apache.storm.topology.TopologyBuilder;
+import org.apache.storm.topology.base.BaseWindowedBolt;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.utils.Utils;
 import stormTweetAnalyzer.Bolt.BFunctionBolt;
@@ -20,6 +21,8 @@ import stormTweetAnalyzer.Bolt.ParseTweetBolt;
 import stormTweetAnalyzer.Bolt.TopicPotentialBolt;
 import stormTweetAnalyzer.Bolt.TweetPotentialBolt;
 import utils.Constants;
+
+import java.util.concurrent.TimeUnit;
 
 import static org.apache.storm.cassandra.DynamicStatementBuilder.*;
 
@@ -41,12 +44,14 @@ public class MainTopology {
         // Define the topology
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout(Constants.BOLT_OR_SPOUT_NAMES.TWEET_KAFKA_SPOUT, new KafkaSpout(kafkaConfig),
-                8);
+                1);
         builder.setBolt(Constants.BOLT_OR_SPOUT_NAMES.TWEET_PARSER_BOLT, new ParseTweetBolt(),
-                8).shuffleGrouping(Constants.BOLT_OR_SPOUT_NAMES.TWEET_KAFKA_SPOUT);
+                4).shuffleGrouping(Constants.BOLT_OR_SPOUT_NAMES.TWEET_KAFKA_SPOUT);
         builder.setBolt(Constants.BOLT_OR_SPOUT_NAMES.TWEET_POTENTIAL_BOLT, new TweetPotentialBolt(),
-                8).shuffleGrouping(Constants.BOLT_OR_SPOUT_NAMES.TWEET_PARSER_BOLT);
-        builder.setBolt(Constants.BOLT_OR_SPOUT_NAMES.TOPIC_POTENTIAL_BOLT, new TopicPotentialBolt(),
+                4).shuffleGrouping(Constants.BOLT_OR_SPOUT_NAMES.TWEET_PARSER_BOLT);
+        builder.setBolt(Constants.BOLT_OR_SPOUT_NAMES.TOPIC_POTENTIAL_BOLT, new TopicPotentialBolt()
+                        .withTimestampField(Constants.EMITTED_TUPLE_NAMES.TWEET_TIME_STAMP)
+                        .withWindow(new BaseWindowedBolt.Duration(1,TimeUnit.HOURS)),
                 1).globalGrouping(Constants.BOLT_OR_SPOUT_NAMES.TWEET_POTENTIAL_BOLT);
         builder.setBolt(Constants.BOLT_OR_SPOUT_NAMES.B_FUNCTION_BOLT, new BFunctionBolt(),
                 1).globalGrouping(Constants.BOLT_OR_SPOUT_NAMES.TOPIC_POTENTIAL_BOLT);
@@ -59,6 +64,7 @@ public class MainTopology {
         Config conf = new Config();
         conf.put(Constants.CASSANDRA_HOST, "localhost:9042");
         conf.put(Constants.CASSANDRA_KEYSPACE, "prediction");
+        conf.setMessageTimeoutSecs(3600);
         conf.setDebug(true);
 
         if (args != null && args.length > 0) {
